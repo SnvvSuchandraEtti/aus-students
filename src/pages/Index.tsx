@@ -87,7 +87,7 @@ const Index = () => {
           <ParticleBackground />
         </Suspense>
         
-        <div className="relative z-10 container mx-auto px-4 py-16">
+        <div className="relative z-10 container mx-auto px-4 py-8 sm:py-16 mobile-hero">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -109,7 +109,7 @@ const Index = () => {
               <GraduationCap className="w-20 h-20 text-primary mx-auto" />
             </motion.div>
             
-            <h1 className="text-6xl lg:text-8xl font-bold mb-6 bg-gradient-to-r from-primary via-primary-glow to-primary bg-clip-text text-transparent">
+            <h1 className="text-4xl sm:text-6xl lg:text-8xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-primary via-primary-glow to-primary bg-clip-text text-transparent">
               Aditya Student Gallery
             </h1>
             
@@ -117,7 +117,7 @@ const Index = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
-              className="text-xl lg:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto"
+              className="text-lg sm:text-xl lg:text-2xl text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto px-4"
             >
               Discover students from all Aditya institutions - Engineering, Diploma, Pharmacy, Business & Forensic Science
             </motion.p>
@@ -154,7 +154,7 @@ const Index = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.6, delay: 0.4 }}
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3 sm:gap-4"
+          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 md:gap-4 mobile-grid tablet-grid tablet-lg-grid xs-mobile-grid"
         >
           {filteredStudents.slice(0, 120).map((student, index) => (
             <StudentCard
