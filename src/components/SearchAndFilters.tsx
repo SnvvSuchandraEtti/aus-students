@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion';
 import { Search, Filter, X } from 'lucide-react';
-import { SearchFilters, CAMPUSES, DEPARTMENTS } from '@/types/student';
+import { SearchFilters, CAMPUSES, DEPARTMENTS, COLLEGE_TYPES, getDepartmentsByType } from '@/types/student';
 
 interface SearchAndFiltersProps {
   filters: SearchFilters;
@@ -24,12 +24,13 @@ export const SearchAndFilters = ({
       searchTerm: '',
       selectedCampus: '',
       selectedDepartment: '',
-      selectedYear: ''
+      selectedYear: '',
+      selectedCollegeType: ''
     });
   };
 
   const hasActiveFilters = filters.searchTerm || filters.selectedCampus || 
-                          filters.selectedDepartment || filters.selectedYear;
+                          filters.selectedDepartment || filters.selectedYear || filters.selectedCollegeType;
 
   return (
     <motion.div
@@ -63,7 +64,24 @@ export const SearchAndFilters = ({
       </div>
 
       {/* Filters */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4 mb-4">
+        {/* College Type Filter */}
+        <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
+          <label className="block text-sm font-medium text-foreground">College Type</label>
+          <select
+            value={filters.selectedCollegeType}
+            onChange={(e) => updateFilter('selectedCollegeType', e.target.value)}
+            className="w-full p-3 bg-background/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300 text-foreground"
+          >
+            <option value="">All Types</option>
+            {COLLEGE_TYPES.map(type => (
+              <option key={type.id} value={type.id}>
+                {type.icon} {type.name}
+              </option>
+            ))}
+          </select>
+        </motion.div>
+
         {/* Campus Filter */}
         <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
           <label className="block text-sm font-medium text-foreground">Campus</label>
@@ -73,9 +91,11 @@ export const SearchAndFilters = ({
             className="w-full p-3 bg-background/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300 text-foreground"
           >
             <option value="">All Campuses</option>
-            {CAMPUSES.map(campus => (
+            {CAMPUSES
+              .filter(campus => !filters.selectedCollegeType || campus.type === filters.selectedCollegeType)
+              .map(campus => (
               <option key={campus.id} value={campus.id}>
-                {campus.name} - {campus.fullName.split('(')[1]?.replace(')', '')}
+                {campus.name} - {campus.fullName.split('(')[1]?.replace(')', '') || campus.fullName}
               </option>
             ))}
           </select>
@@ -90,7 +110,7 @@ export const SearchAndFilters = ({
             className="w-full p-3 bg-background/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300 text-foreground"
           >
             <option value="">All Departments</option>
-            {DEPARTMENTS.map(dept => (
+            {(filters.selectedCollegeType ? getDepartmentsByType(filters.selectedCollegeType) : DEPARTMENTS).map(dept => (
               <option key={dept.id} value={dept.id}>
                 {dept.icon} {dept.name} - {dept.fullName}
               </option>
@@ -107,10 +127,16 @@ export const SearchAndFilters = ({
             className="w-full p-3 bg-background/50 border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300 text-foreground"
           >
             <option value="">All Years</option>
+            <option value="2014">2014</option>
+            <option value="2015">2015</option>
+            <option value="2016">2016</option>
+            <option value="2017">2017</option>
+            <option value="2018">2018</option>
+            <option value="2019">2019</option>
+            <option value="2020">2020</option>
+            <option value="2021">2021</option>
             <option value="2022">2022</option>
             <option value="2023">2023</option>
-            <option value="2024">2024</option>
-            <option value="2025">2025</option>
           </select>
         </motion.div>
 

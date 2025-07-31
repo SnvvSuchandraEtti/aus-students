@@ -20,7 +20,8 @@ const Index = () => {
     searchTerm: '',
     selectedCampus: '',
     selectedDepartment: '',
-    selectedYear: ''
+    selectedYear: '',
+    selectedCollegeType: ''
   });
 
   // Filter students based on search criteria
@@ -38,7 +39,10 @@ const Index = () => {
       const matchesYear = !filters.selectedYear || 
         student.year === filters.selectedYear;
 
-      return matchesSearch && matchesCampus && matchesDepartment && matchesYear;
+      const matchesCollegeType = !filters.selectedCollegeType || 
+        student.campus.type === filters.selectedCollegeType;
+
+      return matchesSearch && matchesCampus && matchesDepartment && matchesYear && matchesCollegeType;
     });
   }, [students, filters]);
 
@@ -106,7 +110,7 @@ const Index = () => {
             </motion.div>
             
             <h1 className="text-6xl lg:text-8xl font-bold mb-6 bg-gradient-to-r from-primary via-primary-glow to-primary bg-clip-text text-transparent">
-              AEC Student Gallery
+              Aditya Student Gallery
             </h1>
             
             <motion.p
@@ -115,7 +119,7 @@ const Index = () => {
               transition={{ delay: 0.5 }}
               className="text-xl lg:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto"
             >
-              Discover students from all three campuses of Aditya Engineering College
+              Discover students from all Aditya institutions - Engineering, Diploma, Pharmacy, Business & Forensic Science
             </motion.p>
             
             <motion.div
@@ -200,7 +204,8 @@ const Index = () => {
                   searchTerm: '',
                   selectedCampus: '',
                   selectedDepartment: '',
-                  selectedYear: ''
+                  selectedYear: '',
+                  selectedCollegeType: ''
                 })}
                 className="px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-colors"
               >
