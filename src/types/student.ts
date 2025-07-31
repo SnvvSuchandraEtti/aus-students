@@ -36,21 +36,21 @@ export const CAMPUSES: Campus[] = [
     name: 'AEC',
     fullName: 'Aditya Engineering College (1st Campus)',
     baseUrl: 'https://info.aec.edu.in/AEC/StudentPhotos/',
-    prefix: '22A91A'
+    prefix: 'A91A'
   },
   {
     id: 'acet',
     name: 'ACET',
     fullName: 'Aditya College of Engineering & Technology (2nd Campus)',
     baseUrl: 'https://info.aec.edu.in/ACET/StudentPhotos/',
-    prefix: '22P31A'
+    prefix: 'P31A'
   },
   {
     id: 'acoe',
     name: 'ACOE',
     fullName: 'Aditya College of Engineering (3rd Campus)',
     baseUrl: 'https://info.aec.edu.in/acoe/StudentPhotos/',
-    prefix: '22MH1A'
+    prefix: 'MH1A'
   }
 ];
 
@@ -124,38 +124,45 @@ export const DEPARTMENTS: Department[] = [
 // Generate student data
 export const generateStudentData = (): Student[] => {
   const students: Student[] = [];
+  const years = ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023'];
+  const yearPrefixes = ['14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
   
   CAMPUSES.forEach(campus => {
     DEPARTMENTS.forEach(department => {
-      // Generate 01-99 range
-      for (let i = 1; i <= 99; i++) {
-        const num = i.toString().padStart(2, '0');
-        const rollNumber = `${campus.prefix}${department.code}${num}`;
-        const imageUrl = `${campus.baseUrl}${rollNumber}.jpg`;
+      years.forEach((year, yearIndex) => {
+        const yearPrefix = yearPrefixes[yearIndex];
+        const fullPrefix = `${yearPrefix}${campus.prefix}`;
         
-        students.push({
-          rollNumber,
-          campus,
-          department,
-          year: '2022',
-          imageUrl
-        });
-      }
-      
-      // Generate A0-Z0 range
-      for (let charCode = 65; charCode <= 90; charCode++) {
-        const letter = String.fromCharCode(charCode);
-        const rollNumber = `${campus.prefix}${department.code}${letter}0`;
-        const imageUrl = `${campus.baseUrl}${rollNumber}.jpg`;
+        // Generate 01-99 range
+        for (let i = 1; i <= 99; i++) {
+          const num = i.toString().padStart(2, '0');
+          const rollNumber = `${fullPrefix}${department.code}${num}`;
+          const imageUrl = `${campus.baseUrl}${rollNumber}.jpg`;
+          
+          students.push({
+            rollNumber,
+            campus,
+            department,
+            year,
+            imageUrl
+          });
+        }
         
-        students.push({
-          rollNumber,
-          campus,
-          department,
-          year: '2022',
-          imageUrl
-        });
-      }
+        // Generate A0-Z0 range
+        for (let charCode = 65; charCode <= 90; charCode++) {
+          const letter = String.fromCharCode(charCode);
+          const rollNumber = `${fullPrefix}${department.code}${letter}0`;
+          const imageUrl = `${campus.baseUrl}${rollNumber}.jpg`;
+          
+          students.push({
+            rollNumber,
+            campus,
+            department,
+            year,
+            imageUrl
+          });
+        }
+      });
     });
   });
   
