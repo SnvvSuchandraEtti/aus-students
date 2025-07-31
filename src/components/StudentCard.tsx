@@ -49,7 +49,7 @@ export const StudentCard = ({ student, onClick, index }: StudentCardProps) => {
     >
       <div className="glass-card rounded-2xl p-4 h-full transition-all duration-300 group-hover:shadow-2xl group-hover:shadow-primary/20">
         {/* Image Container */}
-        <div className="relative aspect-square mb-3 overflow-hidden rounded-xl">
+        <div className="relative aspect-[3/4] mb-3 overflow-hidden rounded-xl">
           {!imageError ? (
             <motion.img
               src={`${student.imageUrl}?retry=${retryCount}`}

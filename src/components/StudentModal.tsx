@@ -47,7 +47,7 @@ export const StudentModal = ({ student, isOpen, onClose }: StudentModalProps) =>
               rotateY: 2,
               transition: { duration: 0.3 }
             }}
-            className="glass-card max-w-2xl w-full max-h-[90vh] overflow-hidden rounded-3xl p-0 relative"
+            className="glass-card max-w-2xl w-full max-h-[90vh] overflow-y-auto rounded-3xl p-0 relative mx-4"
             style={{ perspective: "1000px" }}
           >
             {/* Close Button */}
@@ -60,7 +60,7 @@ export const StudentModal = ({ student, isOpen, onClose }: StudentModalProps) =>
               <X className="w-5 h-5 text-foreground" />
             </motion.button>
 
-            <div className="grid md:grid-cols-2 gap-0 h-full">
+            <div className="flex flex-col md:grid md:grid-cols-2 gap-0">
               {/* Image Section */}
               <div className="relative bg-gradient-to-br from-primary/10 to-primary/5 p-6 flex items-center justify-center">
                 <div className="relative">
@@ -68,7 +68,7 @@ export const StudentModal = ({ student, isOpen, onClose }: StudentModalProps) =>
                     initial={{ scale: 0.8 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.2 }}
-                    className="w-64 h-64 rounded-2xl overflow-hidden shadow-2xl"
+                    className="w-48 h-64 sm:w-64 sm:h-80 rounded-2xl overflow-hidden shadow-2xl"
                   >
                     <img
                       src={student.imageUrl}
