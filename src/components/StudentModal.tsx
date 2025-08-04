@@ -158,19 +158,6 @@ export const StudentModal = ({ student, isOpen, onClose }: StudentModalProps) =>
                   </div>
                 </motion.div>
 
-                <motion.div
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.6 }}
-                  className="pt-4 border-t border-border"
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-sm text-muted-foreground">Roll Number Pattern</span>
-                    <code className="px-2 py-1 bg-primary/10 text-primary rounded text-sm font-mono">
-                      {student.campus.prefix}{student.department.code}XX
-                    </code>
-                  </div>
-                </motion.div>
               </div>
             </div>
           </motion.div>

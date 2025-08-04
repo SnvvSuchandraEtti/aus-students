@@ -65,17 +65,6 @@ export const StudentCard = ({ student, onClick, index }: StudentCardProps) => {
             <div className="absolute inset-0 bg-gradient-to-r from-muted/20 via-muted/40 to-muted/20 animate-pulse" />
           )}
           
-          {/* Hover overlay */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileHover={{ opacity: 1 }}
-            className="absolute inset-0 glass flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-          >
-            <div className="text-center text-white">
-              <GraduationCap className="w-6 h-6 mx-auto mb-1" />
-              <p className="text-xs font-medium">View Details</p>
-            </div>
-          </motion.div>
         </div>
         
         {/* Card Content */}
