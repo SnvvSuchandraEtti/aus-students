@@ -33,11 +33,20 @@ export interface SearchFilters {
 
 // Campus data
 export const CAMPUSES: Campus[] = [
-  // Engineering Colleges
+  // Main Aditya University Campus
+  {
+    id: 'aditya-university',
+    name: 'Aditya University',
+    fullName: 'Aditya University - Main Campus, Surampalem',
+    baseUrl: 'https://info.aec.edu.in/AEC/StudentPhotos/',
+    prefix: 'A91A',
+    type: 'engineering'
+  },
+  // Engineering Colleges under Aditya Group
   {
     id: 'aec',
     name: 'AEC',
-    fullName: 'Aditya Engineering College (1st Campus)',
+    fullName: 'Aditya Engineering College - Surampalem',
     baseUrl: 'https://info.aec.edu.in/AEC/StudentPhotos/',
     prefix: 'A91A',
     type: 'engineering'
@@ -45,65 +54,36 @@ export const CAMPUSES: Campus[] = [
   {
     id: 'acet',
     name: 'ACET',
-    fullName: 'Aditya College of Engineering & Technology (2nd Campus)',
+    fullName: 'Aditya College of Engineering & Technology - Tekkali',
     baseUrl: 'https://info.aec.edu.in/ACET/StudentPhotos/',
     prefix: 'P31A',
     type: 'engineering'
   },
   {
-    id: 'acoe',
-    name: 'ACOE',
-    fullName: 'Aditya College of Engineering (3rd Campus)',
+    id: 'acem',
+    name: 'ACEM',
+    fullName: 'Aditya College of Engineering - Madanapalle',
     baseUrl: 'https://info.aec.edu.in/acoe/StudentPhotos/',
     prefix: 'MH1A',
     type: 'engineering'
-  },
-  // Other Colleges
-  {
-    id: 'aecpoly',
-    name: 'AEC Polytechnic',
-    fullName: 'Aditya Engineering College - Polytechnic',
-    baseUrl: 'https://info.aec.edu.in/aecpoly/StudentPhotos/',
-    type: 'diploma'
-  },
-  {
-    id: 'apc',
-    name: 'APC',
-    fullName: 'Aditya Pharmaceutical College',
-    baseUrl: 'https://info.aec.edu.in/APC/StudentPhotos/',
-    type: 'pharma'
-  },
-  {
-    id: 'agbs',
-    name: 'AGBS',
-    fullName: 'Aditya Global Business School',
-    baseUrl: 'https://info.aec.edu.in/AGBS/StudentPhotos/',
-    type: 'bba'
-  },
-  {
-    id: 'forensic',
-    name: 'AIFS',
-    fullName: 'Aditya Institute of Forensic Science',
-    baseUrl: 'https://aditya.ac.in/forensic/StudentPhotos/',
-    type: 'forensic'
   }
 ];
 
 // Department data
 export const DEPARTMENTS: Department[] = [
-  // Engineering Departments
+  // Real Aditya University Engineering Departments
   {
     id: 'cse',
     name: 'CSE',
     code: '05',
-    fullName: 'Computer Science Engineering',
+    fullName: 'Computer Science & Engineering',
     icon: '💻'
   },
   {
     id: 'ece',
     name: 'ECE',
     code: '04',
-    fullName: 'Electronics and Communication Engineering',
+    fullName: 'Electronics & Communication Engineering',
     icon: '📡'
   },
   {
@@ -135,16 +115,9 @@ export const DEPARTMENTS: Department[] = [
     icon: '🌐'
   },
   {
-    id: 'ds',
-    name: 'DS',
-    code: '05',
-    fullName: 'Data Science',
-    icon: '📊'
-  },
-  {
     id: 'aiml',
-    name: 'AIML',
-    code: '05',
+    name: 'AI&ML',
+    code: '66',
     fullName: 'Artificial Intelligence & Machine Learning',
     icon: '🤖'
   },
@@ -155,100 +128,57 @@ export const DEPARTMENTS: Department[] = [
     fullName: 'Agricultural Engineering',
     icon: '🌾'
   },
-  // Diploma Departments
   {
-    id: 'cm',
-    name: 'CM',
-    code: 'CM',
-    fullName: 'Computer Engineering (Diploma)',
-    icon: '💻'
+    id: 'mining',
+    name: 'MINING',
+    code: '56',
+    fullName: 'Mining Engineering',
+    icon: '⛏️'
   },
   {
-    id: 'ee',
-    name: 'EE',
-    code: 'EE',
-    fullName: 'Electrical Engineering (Diploma)',
-    icon: '⚡'
+    id: 'petroleum',
+    name: 'PETRO',
+    code: '57',
+    fullName: 'Petroleum Engineering',
+    icon: '🛢️'
+  },
+  // Additional Engineering Specializations
+  {
+    id: 'biotech',
+    name: 'BIOTECH',
+    code: '06',
+    fullName: 'Biotechnology',
+    icon: '🧬'
   },
   {
-    id: 'mech',
-    name: 'MECH',
-    code: 'MECH',
-    fullName: 'Mechanical Engineering (Diploma)',
-    icon: '⚙️'
-  },
-  {
-    id: 'civil',
-    name: 'CIVIL',
-    code: 'CIVIL',
-    fullName: 'Civil Engineering (Diploma)',
-    icon: '🏗️'
-  },
-  // Pharma Departments
-  {
-    id: 'pharma',
-    name: 'PHARMA',
-    code: 'PH',
-    fullName: 'Pharmacy',
-    icon: '💊'
-  },
-  // BBA Departments
-  {
-    id: 'bba',
-    name: 'BBA',
-    code: 'BBA',
-    fullName: 'Bachelor of Business Administration',
-    icon: '💼'
-  },
-  {
-    id: 'mba',
-    name: 'MBA',
-    code: 'MBA',
-    fullName: 'Master of Business Administration',
-    icon: '🎓'
-  },
-  // Forensic Departments
-  {
-    id: 'forensic',
-    name: 'FORENSIC',
-    code: 'FS',
-    fullName: 'Forensic Science',
-    icon: '🔬'
+    id: 'iot',
+    name: 'IoT',
+    code: '67',
+    fullName: 'Internet of Things',
+    icon: '🌐'
   }
 ];
 
-// College Types
+// College Types - Real Aditya University Programs
 export const COLLEGE_TYPES = [
-  { id: 'engineering', name: 'Engineering', icon: '⚙️' },
-  { id: 'diploma', name: 'Diploma', icon: '📜' },
-  { id: 'pharma', name: 'Pharmacy', icon: '💊' },
-  { id: 'bba', name: 'Business', icon: '💼' },
-  { id: 'forensic', name: 'Forensic Science', icon: '🔬' }
+  { id: 'engineering', name: 'Engineering', icon: '⚙️' }
 ];
 
 // Department mapping by college type
 export const getDepartmentsByType = (type: string) => {
   switch (type) {
     case 'engineering':
-      return DEPARTMENTS.filter(d => ['cse', 'ece', 'eee', 'me', 'ce', 'it', 'ds', 'aiml', 'ae'].includes(d.id));
-    case 'diploma':
-      return DEPARTMENTS.filter(d => ['cm', 'ee', 'mech', 'civil'].includes(d.id));
-    case 'pharma':
-      return DEPARTMENTS.filter(d => ['pharma'].includes(d.id));
-    case 'bba':
-      return DEPARTMENTS.filter(d => ['bba', 'mba'].includes(d.id));
-    case 'forensic':
-      return DEPARTMENTS.filter(d => ['forensic'].includes(d.id));
+      return DEPARTMENTS.filter(d => ['cse', 'ece', 'eee', 'me', 'ce', 'it', 'aiml', 'ae', 'mining', 'petroleum', 'biotech', 'iot'].includes(d.id));
     default:
       return DEPARTMENTS;
   }
 };
 
-// Generate student data
+// Generate student data with real Aditya University roll number patterns
 export const generateStudentData = (): Student[] => {
   const students: Student[] = [];
-  const years = ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023'];
-  const yearPrefixes = ['14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
+  const years = ['2018', '2019', '2020', '2021', '2022', '2023', '2024'];
+  const yearPrefixes = ['18', '19', '20', '21', '22', '23', '24'];
   
   CAMPUSES.forEach(campus => {
     const relevantDepartments = getDepartmentsByType(campus.type);
@@ -257,112 +187,24 @@ export const generateStudentData = (): Student[] => {
       years.forEach((year, yearIndex) => {
         const yearPrefix = yearPrefixes[yearIndex];
         
-        // Generate roll numbers based on college type
-        switch (campus.type) {
-          case 'engineering':
-            // Engineering colleges: [year][campus_prefix][dept_code][number]
-            if (campus.prefix) {
-              const fullPrefix = `${yearPrefix}${campus.prefix}`;
-              
-              // Generate 01-99 range
-              for (let i = 1; i <= 99; i++) {
-                const num = i.toString().padStart(2, '0');
-                const rollNumber = `${fullPrefix}${department.code}${num}`;
-                const imageUrl = `${campus.baseUrl}${rollNumber}.jpg`;
-                
-                students.push({
-                  rollNumber,
-                  campus,
-                  department,
-                  year,
-                  imageUrl
-                });
-              }
-              
-              // Generate A0-Z0 range
-              for (let charCode = 65; charCode <= 90; charCode++) {
-                const letter = String.fromCharCode(charCode);
-                const rollNumber = `${fullPrefix}${department.code}${letter}0`;
-                const imageUrl = `${campus.baseUrl}${rollNumber}.jpg`;
-                
-                students.push({
-                  rollNumber,
-                  campus,
-                  department,
-                  year,
-                  imageUrl
-                });
-              }
-            }
-            break;
+        // Real Aditya University roll number format: [YY][A91A][DEPT][NUMBER]
+        if (campus.prefix) {
+          const fullPrefix = `${yearPrefix}${campus.prefix}`;
+          
+          // Generate realistic range 01-60 (typical class size)
+          for (let i = 1; i <= 60; i++) {
+            const num = i.toString().padStart(2, '0');
+            const rollNumber = `${fullPrefix}${department.code}${num}`;
+            const imageUrl = `${campus.baseUrl}${rollNumber}.jpg`;
             
-          case 'diploma':
-            // Diploma: [year][number]-[dept]-[sequence]
-            for (let i = 1; i <= 100; i++) {
-              const num = (200 + i).toString();
-              for (let seq = 1; seq <= 50; seq++) {
-                const seqNum = seq.toString().padStart(3, '0');
-                const rollNumber = `${yearPrefix}${num}-${department.code}-${seqNum}`;
-                const imageUrl = `${campus.baseUrl}${rollNumber}.jpg`;
-                
-                students.push({
-                  rollNumber,
-                  campus,
-                  department,
-                  year,
-                  imageUrl
-                });
-              }
-            }
-            break;
-            
-          case 'pharma':
-            // Pharma: [year][sequence] (6 digits)
-            for (let i = 1; i <= 999; i++) {
-              const rollNumber = `${yearPrefix}19${i.toString().padStart(3, '0')}`;
-              const imageUrl = `${campus.baseUrl}${rollNumber}.jpg`;
-              
-              students.push({
-                rollNumber,
-                campus,
-                department,
-                year,
-                imageUrl
-              });
-            }
-            break;
-            
-          case 'bba':
-            // BBA: [year][sequence] (7 digits)
-            for (let i = 1; i <= 999; i++) {
-              const rollNumber = `${yearPrefix}22${i.toString().padStart(3, '0')}`;
-              const imageUrl = `${campus.baseUrl}${rollNumber}.jpg`;
-              
-              students.push({
-                rollNumber,
-                campus,
-                department,
-                year,
-                imageUrl
-              });
-            }
-            break;
-            
-          case 'forensic':
-            // Forensic: [year]FS[sequence]
-            for (let i = 1; i <= 100; i++) {
-              const rollNumber = `${yearPrefix}FS${i.toString().padStart(3, '0')}`;
-              const imageUrl = `${campus.baseUrl}${rollNumber}.jpg`;
-              
-              students.push({
-                rollNumber,
-                campus,
-                department,
-                year,
-                imageUrl
-              });
-            }
-            break;
+            students.push({
+              rollNumber,
+              campus,
+              department,
+              year,
+              imageUrl
+            });
+          }
         }
       });
     });

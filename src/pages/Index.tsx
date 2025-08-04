@@ -2,6 +2,8 @@ import { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Suspense } from 'react';
 import { GraduationCap, Sparkles } from 'lucide-react';
+import AdityaLogo from '@/assets/aditya-university-logo.png';
+import { Button } from '@/components/ui/button';
 
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { ParticleBackground } from '@/components/ParticleBackground';
@@ -94,22 +96,21 @@ const Index = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-12"
           >
+            {/* University Logo */}
             <motion.div
-              animate={{ 
-                rotate: [0, 5, -5, 0],
-                scale: [1, 1.05, 1]
-              }}
-              transition={{ 
-                duration: 4,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-              className="inline-block mb-6"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="mb-8"
             >
-              <GraduationCap className="w-20 h-20 text-primary mx-auto" />
+              <img 
+                src={AdityaLogo} 
+                alt="Aditya University Logo" 
+                className="w-32 h-16 sm:w-48 sm:h-24 lg:w-64 lg:h-32 mx-auto object-contain drop-shadow-2xl"
+              />
             </motion.div>
             
-            <h1 className="text-4xl sm:text-6xl lg:text-8xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-primary via-primary-glow to-primary bg-clip-text text-transparent">
+            <h1 className="text-4xl sm:text-6xl lg:text-8xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-blue-600 via-orange-500 to-blue-800 bg-clip-text text-transparent tracking-tight">
               Aditya Student Gallery
             </h1>
             
@@ -117,20 +118,68 @@ const Index = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.5 }}
-              className="text-lg sm:text-xl lg:text-2xl text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto px-4"
+              className="text-lg sm:text-xl lg:text-3xl text-muted-foreground mb-6 sm:mb-8 max-w-4xl mx-auto px-4 leading-relaxed font-light"
             >
-              Discover students from all Aditya institutions - Engineering, Diploma, Pharmacy, Business & Forensic Science
+              Discover the brilliant minds of <span className="font-semibold text-primary bg-gradient-to-r from-blue-600 to-orange-500 bg-clip-text text-transparent">Aditya University</span>
+              <br />
+              <span className="text-base sm:text-lg lg:text-xl">Find students by roll number, department, or campus across all engineering programs</span>
             </motion.p>
             
+            {/* Enhanced Stats Cards */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.6 }}
+              className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 max-w-4xl mx-auto mb-8"
+            >
+              <div className="text-center group">
+                <div className="bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl p-4 sm:p-6 mb-4 border border-primary/20 backdrop-blur-sm group-hover:scale-105 transition-transform duration-300">
+                  <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary mb-2">
+                    {filteredStudents.length.toLocaleString()}+
+                  </div>
+                  <div className="text-sm sm:text-base text-muted-foreground font-medium">Students</div>
+                </div>
+              </div>
+              
+              <div className="text-center group">
+                <div className="bg-gradient-to-br from-orange-500/20 to-orange-500/10 rounded-2xl p-4 sm:p-6 mb-4 border border-orange-500/20 backdrop-blur-sm group-hover:scale-105 transition-transform duration-300">
+                  <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-orange-600 mb-2">
+                    4
+                  </div>
+                  <div className="text-sm sm:text-base text-muted-foreground font-medium">Campuses</div>
+                </div>
+              </div>
+              
+              <div className="text-center group">
+                <div className="bg-gradient-to-br from-blue-600/20 to-blue-600/10 rounded-2xl p-4 sm:p-6 mb-4 border border-blue-600/20 backdrop-blur-sm group-hover:scale-105 transition-transform duration-300">
+                  <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-600 mb-2">
+                    12+
+                  </div>
+                  <div className="text-sm sm:text-base text-muted-foreground font-medium">Departments</div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Call to Action */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 }}
-              className="flex items-center justify-center space-x-2 text-muted-foreground"
+              transition={{ duration: 0.6, delay: 0.8 }}
+              className="flex flex-col sm:flex-row items-center justify-center gap-4"
             >
-              <Sparkles className="w-4 h-4" />
-              <span>Premium Student Portal Experience</span>
-              <Sparkles className="w-4 h-4" />
+              <Button 
+                size="lg" 
+                className="bg-gradient-to-r from-blue-600 to-orange-500 hover:from-blue-700 hover:to-orange-600 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
+                onClick={() => document.getElementById('search-section')?.scrollIntoView({ behavior: 'smooth' })}
+              >
+                Explore Student Gallery
+              </Button>
+              
+              <div className="flex items-center space-x-2 text-muted-foreground">
+                <Sparkles className="w-4 h-4 text-orange-500" />
+                <span className="text-sm">Real Aditya University Data</span>
+                <Sparkles className="w-4 h-4 text-blue-600" />
+              </div>
             </motion.div>
           </motion.div>
         </div>
@@ -142,12 +191,28 @@ const Index = () => {
         <StatsSection students={students} />
         
         {/* Search and Filters */}
-        <SearchAndFilters
-          filters={filters}
-          onFiltersChange={setFilters}
-          totalStudents={students.length}
-          filteredCount={filteredStudents.length}
-        />
+        <section id="search-section" className="mb-12">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-8"
+          >
+            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-orange-500 bg-clip-text text-transparent">
+              Find Your Peers
+            </h2>
+            <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
+              Search through our comprehensive database of students across all Aditya University campuses
+            </p>
+          </motion.div>
+          <SearchAndFilters
+            filters={filters}
+            onFiltersChange={setFilters}
+            totalStudents={students.length}
+            filteredCount={filteredStudents.length}
+          />
+        </section>
 
         {/* Student Gallery */}
         <motion.div
