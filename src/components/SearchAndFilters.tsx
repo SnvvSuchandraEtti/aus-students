@@ -64,7 +64,24 @@ export const SearchAndFilters = ({
       </div>
 
       {/* Filters */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 mobile-filters tablet-filters">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 mb-4 mobile-filters tablet-filters">
+
+        {/* College Type Filter */}
+        <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
+          <label className="block text-sm font-medium text-foreground">Program</label>
+          <select
+            value={filters.selectedCollegeType}
+            onChange={(e) => updateFilter('selectedCollegeType', e.target.value)}
+            className="w-full p-3 bg-card border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300 text-foreground z-50"
+          >
+            <option value="">All Programs</option>
+            {COLLEGE_TYPES.map(type => (
+              <option key={type.id} value={type.id}>
+                {type.icon} {type.name}
+              </option>
+            ))}
+          </select>
+        </motion.div>
 
         {/* Campus Filter */}
         <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
