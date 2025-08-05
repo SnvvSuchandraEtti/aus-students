@@ -11,6 +11,8 @@ import { SearchAndFilters } from '@/components/SearchAndFilters';
 import { StudentCard } from '@/components/StudentCard';
 import { StudentModal } from '@/components/StudentModal';
 import { StatsSection } from '@/components/StatsSection';
+import { FloatingShapes, CursorTrail, GridPattern } from '@/components/ModernGraphics';
+import { ScrollReveal, ParallaxCard, FeatureShowcase, CountingNumber, ModernCard } from '@/components/InteractiveElements';
 
 import { Student, SearchFilters, generateStudentData } from '@/types/student';
 
@@ -81,7 +83,9 @@ const Index = () => {
 
   return (
     <div className="min-h-screen relative">
-      <ThemeToggle />
+      <FloatingShapes />
+      <CursorTrail />
+      <GridPattern />
       
       {/* Hero Section */}
       <div className="relative overflow-hidden">
@@ -135,7 +139,7 @@ const Index = () => {
               <div className="text-center group">
                 <div className="bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl p-4 sm:p-6 mb-4 border border-primary/20 backdrop-blur-sm group-hover:scale-105 transition-transform duration-300">
                   <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary mb-2">
-                    {filteredStudents.length.toLocaleString()}+
+                    <CountingNumber target={filteredStudents.length} />+
                   </div>
                   <div className="text-sm sm:text-base text-muted-foreground font-medium">Students</div>
                 </div>
@@ -144,7 +148,7 @@ const Index = () => {
               <div className="text-center group">
                 <div className="bg-gradient-to-br from-orange-500/20 to-orange-500/10 rounded-2xl p-4 sm:p-6 mb-4 border border-orange-500/20 backdrop-blur-sm group-hover:scale-105 transition-transform duration-300">
                   <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-orange-600 mb-2">
-                    4
+                    <CountingNumber target={4} />
                   </div>
                   <div className="text-sm sm:text-base text-muted-foreground font-medium">Campuses</div>
                 </div>
@@ -153,7 +157,7 @@ const Index = () => {
               <div className="text-center group">
                 <div className="bg-gradient-to-br from-blue-600/20 to-blue-600/10 rounded-2xl p-4 sm:p-6 mb-4 border border-blue-600/20 backdrop-blur-sm group-hover:scale-105 transition-transform duration-300">
                   <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-600 mb-2">
-                    12+
+                    <CountingNumber target={12} />+
                   </div>
                   <div className="text-sm sm:text-base text-muted-foreground font-medium">Departments</div>
                 </div>
@@ -185,51 +189,81 @@ const Index = () => {
         </div>
       </div>
 
+      {/* Features Section */}
+      <ScrollReveal>
+        <section className="relative z-10 py-12 sm:py-20">
+          <div className="container mx-auto px-4 sm:px-6">
+            <div className="text-center mb-12">
+              <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-foreground">
+                Modern Student Experience
+              </h2>
+              <p className="text-muted-foreground max-w-2xl mx-auto">
+                Experience the future of student connectivity with our cutting-edge platform
+              </p>
+            </div>
+            <FeatureShowcase />
+          </div>
+        </section>
+      </ScrollReveal>
+
       {/* Main Content */}
       <div className="container mx-auto px-4 pb-16">
         {/* Statistics Section */}
-        <StatsSection students={students} />
+        <ParallaxCard offset={30}>
+          <StatsSection students={students} />
+        </ParallaxCard>
         
         {/* Search and Filters */}
         <section id="search-section" className="mb-12">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            viewport={{ once: true }}
-            className="text-center mb-8"
-          >
-            <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-orange-500 bg-clip-text text-transparent">
-              Find Your Peers
-            </h2>
-            <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-              Search through our comprehensive database of students across all Aditya University campuses
-            </p>
-          </motion.div>
-          <SearchAndFilters
-            filters={filters}
-            onFiltersChange={setFilters}
-            totalStudents={students.length}
-            filteredCount={filteredStudents.length}
-          />
+          <ScrollReveal>
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+              viewport={{ once: true }}
+              className="text-center mb-8"
+            >
+              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-orange-500 bg-clip-text text-transparent">
+                Find Your Peers
+              </h2>
+              <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
+                Search through our comprehensive database of students across all Aditya University campuses
+              </p>
+            </motion.div>
+            <SearchAndFilters
+              filters={filters}
+              onFiltersChange={setFilters}
+              totalStudents={students.length}
+              filteredCount={filteredStudents.length}
+            />
+          </ScrollReveal>
         </section>
 
         {/* Student Gallery */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 md:gap-4 mobile-grid tablet-grid tablet-lg-grid xs-mobile-grid"
-        >
-          {filteredStudents.slice(0, 120).map((student, index) => (
-            <StudentCard
-              key={student.rollNumber}
-              student={student}
-              onClick={handleStudentClick}
-              index={index}
-            />
-          ))}
-        </motion.div>
+        <ScrollReveal>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.4 }}
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 md:gap-4 mobile-grid tablet-grid tablet-lg-grid xs-mobile-grid"
+          >
+            {filteredStudents.slice(0, 120).map((student, index) => (
+              <motion.div
+                key={student.rollNumber}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.02, duration: 0.3 }}
+                whileHover={{ y: -5, scale: 1.02 }}
+              >
+                <StudentCard
+                  student={student}
+                  onClick={handleStudentClick}
+                  index={index}
+                />
+              </motion.div>
+            ))}
+          </motion.div>
+        </ScrollReveal>
 
         {/* Load More Message */}
         {filteredStudents.length > 120 && (
@@ -250,34 +284,48 @@ const Index = () => {
 
         {/* No Results */}
         {filteredStudents.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5 }}
-            className="text-center py-16"
-          >
-            <div className="glass-card p-12 rounded-3xl max-w-md mx-auto">
-              <GraduationCap className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-foreground mb-2">No Students Found</h3>
-              <p className="text-muted-foreground mb-6">
-                Try adjusting your search criteria or filters
-              </p>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => setFilters({
-                  searchTerm: '',
-                  selectedCampus: '',
-                  selectedDepartment: '',
-                  selectedYear: '',
-                  selectedCollegeType: ''
-                })}
-                className="px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-colors"
-              >
-                Clear All Filters
-              </motion.button>
-            </div>
-          </motion.div>
+          <ScrollReveal>
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+              className="text-center py-16"
+            >
+              <ModernCard className="p-12 rounded-3xl max-w-md mx-auto">
+                <motion.div
+                  animate={{ 
+                    rotate: [0, 10, -10, 0],
+                    scale: [1, 1.1, 1]
+                  }}
+                  transition={{ 
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                >
+                  <GraduationCap className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+                </motion.div>
+                <h3 className="text-2xl font-bold text-foreground mb-2">No Students Found</h3>
+                <p className="text-muted-foreground mb-6">
+                  Try adjusting your search criteria or filters
+                </p>
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => setFilters({
+                    searchTerm: '',
+                    selectedCampus: '',
+                    selectedDepartment: '',
+                    selectedYear: '',
+                    selectedCollegeType: ''
+                  })}
+                  className="px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-colors"
+                >
+                  Clear All Filters
+                </motion.button>
+              </ModernCard>
+            </motion.div>
+          </ScrollReveal>
         )}
       </div>
 
