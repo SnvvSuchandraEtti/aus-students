@@ -2,17 +2,15 @@ import { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Suspense } from 'react';
 import { GraduationCap, Sparkles } from 'lucide-react';
-import AdityaLogo from '@/assets/aditya-university-logo.png';
+import AdityaLogo from '/lovable-uploads/61cec41c-2099-4569-a713-5fe165947d1f.png';
 import { Button } from '@/components/ui/button';
 
-import { ThemeToggle } from '@/components/ThemeToggle';
 import { ParticleBackground } from '@/components/ParticleBackground';
 import { SearchAndFilters } from '@/components/SearchAndFilters';
 import { StudentCard } from '@/components/StudentCard';
 import { StudentModal } from '@/components/StudentModal';
-import { StatsSection } from '@/components/StatsSection';
 import { FloatingShapes, CursorTrail, GridPattern } from '@/components/ModernGraphics';
-import { ScrollReveal, ParallaxCard, FeatureShowcase, CountingNumber, ModernCard } from '@/components/InteractiveElements';
+import { ScrollReveal, ModernCard } from '@/components/InteractiveElements';
 
 import { Student, SearchFilters, generateStudentData } from '@/types/student';
 
@@ -124,112 +122,18 @@ const Index = () => {
               transition={{ delay: 0.5 }}
               className="text-lg sm:text-xl lg:text-3xl text-muted-foreground mb-6 sm:mb-8 max-w-4xl mx-auto px-4 leading-relaxed font-light"
             >
-              Discover the brilliant minds of <span className="font-semibold text-primary bg-gradient-to-r from-blue-600 to-orange-500 bg-clip-text text-transparent">Aditya University</span>
-              <br />
-              <span className="text-base sm:text-lg lg:text-xl">Find students by roll number, department, or campus across all engineering programs</span>
+              Find students by roll number, department, or campus across all engineering programs
             </motion.p>
-            
-            {/* Enhanced Stats Cards */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.6 }}
-              className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 max-w-4xl mx-auto mb-8"
-            >
-              <div className="text-center group">
-                <div className="bg-gradient-to-br from-primary/20 to-primary/10 rounded-2xl p-4 sm:p-6 mb-4 border border-primary/20 backdrop-blur-sm group-hover:scale-105 transition-transform duration-300">
-                  <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-primary mb-2">
-                    <CountingNumber target={filteredStudents.length} />+
-                  </div>
-                  <div className="text-sm sm:text-base text-muted-foreground font-medium">Students</div>
-                </div>
-              </div>
-              
-              <div className="text-center group">
-                <div className="bg-gradient-to-br from-orange-500/20 to-orange-500/10 rounded-2xl p-4 sm:p-6 mb-4 border border-orange-500/20 backdrop-blur-sm group-hover:scale-105 transition-transform duration-300">
-                  <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-orange-600 mb-2">
-                    <CountingNumber target={4} />
-                  </div>
-                  <div className="text-sm sm:text-base text-muted-foreground font-medium">Campuses</div>
-                </div>
-              </div>
-              
-              <div className="text-center group">
-                <div className="bg-gradient-to-br from-blue-600/20 to-blue-600/10 rounded-2xl p-4 sm:p-6 mb-4 border border-blue-600/20 backdrop-blur-sm group-hover:scale-105 transition-transform duration-300">
-                  <div className="text-2xl sm:text-3xl lg:text-4xl font-bold text-blue-600 mb-2">
-                    <CountingNumber target={12} />+
-                  </div>
-                  <div className="text-sm sm:text-base text-muted-foreground font-medium">Departments</div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Call to Action */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.8 }}
-              className="flex flex-col sm:flex-row items-center justify-center gap-4"
-            >
-              <Button 
-                size="lg" 
-                className="bg-gradient-to-r from-blue-600 to-orange-500 hover:from-blue-700 hover:to-orange-600 text-white px-8 py-4 text-lg font-semibold rounded-full shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105"
-                onClick={() => document.getElementById('search-section')?.scrollIntoView({ behavior: 'smooth' })}
-              >
-                Explore Student Gallery
-              </Button>
-              
-              <div className="flex items-center space-x-2 text-muted-foreground">
-                <Sparkles className="w-4 h-4 text-orange-500" />
-                <span className="text-sm">Real Aditya University Data</span>
-                <Sparkles className="w-4 h-4 text-blue-600" />
-              </div>
-            </motion.div>
           </motion.div>
         </div>
       </div>
 
-      {/* Features Section */}
-      <ScrollReveal>
-        <section className="relative z-10 py-12 sm:py-20">
-          <div className="container mx-auto px-4 sm:px-6">
-            <div className="text-center mb-12">
-              <h2 className="text-2xl sm:text-3xl font-bold mb-4 text-foreground">
-                Modern Student Experience
-              </h2>
-              <p className="text-muted-foreground max-w-2xl mx-auto">
-                Experience the future of student connectivity with our cutting-edge platform
-              </p>
-            </div>
-            <FeatureShowcase />
-          </div>
-        </section>
-      </ScrollReveal>
 
       {/* Main Content */}
       <div className="container mx-auto px-4 pb-16">
-        {/* Statistics Section */}
-        <ParallaxCard offset={30}>
-          <StatsSection students={students} />
-        </ParallaxCard>
-        
         {/* Search and Filters */}
         <section id="search-section" className="mb-12">
           <ScrollReveal>
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              viewport={{ once: true }}
-              className="text-center mb-8"
-            >
-              <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-4 bg-gradient-to-r from-blue-600 to-orange-500 bg-clip-text text-transparent">
-                Find Your Peers
-              </h2>
-              <p className="text-base sm:text-lg text-muted-foreground max-w-2xl mx-auto">
-                Search through our comprehensive database of students across all Aditya University campuses
-              </p>
-            </motion.div>
             <SearchAndFilters
               filters={filters}
               onFiltersChange={setFilters}
