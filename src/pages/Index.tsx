@@ -28,7 +28,7 @@ const Index = () => {
 
   // Filter students based on search criteria
   const filteredStudents = useMemo(() => {
-    return students.filter(student => {
+    let filtered = students.filter(student => {
       const matchesSearch = !filters.searchTerm || 
         student.rollNumber.toLowerCase().includes(filters.searchTerm.toLowerCase());
       
@@ -46,6 +46,14 @@ const Index = () => {
 
       return matchesSearch && matchesCampus && matchesDepartment && matchesYear && matchesCollegeType;
     });
+
+    // If no filters applied, shuffle students for random display
+    if (!filters.searchTerm && !filters.selectedCampus && !filters.selectedDepartment && 
+        !filters.selectedYear && !filters.selectedCollegeType) {
+      filtered = [...filtered].sort(() => Math.random() - 0.5);
+    }
+
+    return filtered;
   }, [students, filters]);
 
   const handleStudentClick = (student: Student) => {
@@ -116,14 +124,6 @@ const Index = () => {
               Aditya Student Gallery
             </h1>
             
-            <motion.p
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.5 }}
-              className="text-lg sm:text-xl lg:text-3xl text-muted-foreground mb-6 sm:mb-8 max-w-4xl mx-auto px-4 leading-relaxed font-light"
-            >
-              Find students by roll number, department, or campus across all engineering programs
-            </motion.p>
           </motion.div>
         </div>
       </div>
@@ -169,22 +169,6 @@ const Index = () => {
           </motion.div>
         </ScrollReveal>
 
-        {/* Load More Message */}
-        {filteredStudents.length > 120 && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5 }}
-            className="text-center mt-12 p-6 glass-card rounded-2xl"
-          >
-            <p className="text-muted-foreground mb-2">
-              Showing first 120 of {filteredStudents.length} results
-            </p>
-            <p className="text-sm text-muted-foreground">
-              Use search and filters to narrow down results
-            </p>
-          </motion.div>
-        )}
 
         {/* No Results */}
         {filteredStudents.length === 0 && (

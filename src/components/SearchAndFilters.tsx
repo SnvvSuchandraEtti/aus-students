@@ -64,7 +64,11 @@ export const SearchAndFilters = ({
       </div>
 
       {/* Filters */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 sm:gap-4 mb-4 mobile-filters tablet-filters">
+      <div className={`grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 mobile-filters tablet-filters ${
+        filters.selectedCollegeType === 'bba' || filters.selectedCollegeType === 'forensic' 
+          ? 'lg:grid-cols-3' 
+          : 'lg:grid-cols-5'
+      }`}>
 
         {/* College Type Filter */}
         <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
@@ -83,41 +87,45 @@ export const SearchAndFilters = ({
           </select>
         </motion.div>
 
-        {/* Campus Filter */}
-        <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
-          <label className="block text-sm font-medium text-foreground">Campus</label>
-          <select
-            value={filters.selectedCampus}
-            onChange={(e) => updateFilter('selectedCampus', e.target.value)}
-            className="w-full p-3 bg-card border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300 text-foreground z-50"
-          >
-            <option value="">All Campuses</option>
-            {CAMPUSES
-              .filter(campus => !filters.selectedCollegeType || campus.type === filters.selectedCollegeType)
-              .map(campus => (
-              <option key={campus.id} value={campus.id}>
-                {campus.name} - {campus.fullName.split('(')[1]?.replace(')', '') || campus.fullName}
-              </option>
-            ))}
-          </select>
-        </motion.div>
+        {/* Campus Filter - Hide for BBA and Forensic */}
+        {filters.selectedCollegeType !== 'bba' && filters.selectedCollegeType !== 'forensic' && (
+          <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
+            <label className="block text-sm font-medium text-foreground">Campus</label>
+            <select
+              value={filters.selectedCampus}
+              onChange={(e) => updateFilter('selectedCampus', e.target.value)}
+              className="w-full p-3 bg-card border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300 text-foreground z-50"
+            >
+              <option value="">All Campuses</option>
+              {CAMPUSES
+                .filter(campus => !filters.selectedCollegeType || campus.type === filters.selectedCollegeType)
+                .map(campus => (
+                <option key={campus.id} value={campus.id}>
+                  {campus.name} - {campus.fullName.split('(')[1]?.replace(')', '') || campus.fullName}
+                </option>
+              ))}
+            </select>
+          </motion.div>
+        )}
 
-        {/* Department Filter */}
-        <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
-          <label className="block text-sm font-medium text-foreground">Department</label>
-          <select
-            value={filters.selectedDepartment}
-            onChange={(e) => updateFilter('selectedDepartment', e.target.value)}
-            className="w-full p-3 bg-card border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300 text-foreground z-50"
-          >
-            <option value="">All Departments</option>
-            {(filters.selectedCollegeType ? getDepartmentsByType(filters.selectedCollegeType) : DEPARTMENTS).map(dept => (
-              <option key={dept.id} value={dept.id}>
-                {dept.icon} {dept.name} - {dept.fullName}
-              </option>
-            ))}
-          </select>
-        </motion.div>
+        {/* Department Filter - Hide for BBA and Forensic */}
+        {filters.selectedCollegeType !== 'bba' && filters.selectedCollegeType !== 'forensic' && (
+          <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
+            <label className="block text-sm font-medium text-foreground">Department</label>
+            <select
+              value={filters.selectedDepartment}
+              onChange={(e) => updateFilter('selectedDepartment', e.target.value)}
+              className="w-full p-3 bg-card border border-border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300 text-foreground z-50"
+            >
+              <option value="">All Departments</option>
+              {(filters.selectedCollegeType ? getDepartmentsByType(filters.selectedCollegeType) : DEPARTMENTS).map(dept => (
+                <option key={dept.id} value={dept.id}>
+                  {dept.icon} {dept.name} - {dept.fullName}
+                </option>
+              ))}
+            </select>
+          </motion.div>
+        )}
 
         {/* Year Filter */}
         <motion.div whileHover={{ scale: 1.02 }} className="space-y-2">
@@ -169,18 +177,16 @@ export const SearchAndFilters = ({
         className="flex items-center justify-between text-sm text-muted-foreground"
       >
         <span>
-          Showing <strong className="text-primary">{filteredCount.toLocaleString()}</strong> of{' '}
-          <strong>{totalStudents.toLocaleString()}</strong> students
+          {hasActiveFilters && (
+            <motion.span
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="text-primary font-medium"
+            >
+              Filters active
+            </motion.span>
+          )}
         </span>
-        {hasActiveFilters && (
-          <motion.span
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="text-primary font-medium"
-          >
-            Filters active
-          </motion.span>
-        )}
       </motion.div>
     </motion.div>
   );
