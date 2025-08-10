@@ -328,10 +328,10 @@ export const generateStudentData = (): Student[] => {
               });
             }
             
-            // Generate a0-z9 (26 letters * 10 digits = 260 more)
+            // Generate A0-Z9 (26 letters * 10 digits = 260 more)
             for (let letterIndex = 0; letterIndex < 26; letterIndex++) {
               for (let digit = 0; digit <= 9; digit++) {
-                const letter = String.fromCharCode(97 + letterIndex); // a, b, c...z
+                const letter = String.fromCharCode(65 + letterIndex); // A, B, C...Z (uppercase)
                 const rollNumberPattern = `${yearPrefix}${campus.prefix}${deptCode}${letter}${digit}`;
                 const imageUrlPattern = `${campus.baseUrl}${rollNumberPattern}.jpg`;
                 
@@ -367,10 +367,10 @@ export const generateStudentData = (): Student[] => {
               });
             }
             
-            // Generate a0-z9 (26 letters * 10 digits = 260 more)
+            // Generate A0-Z9 (26 letters * 10 digits = 260 more)
             for (let letterIndex = 0; letterIndex < 26; letterIndex++) {
               for (let digit = 0; digit <= 9; digit++) {
-                const letter = String.fromCharCode(97 + letterIndex);
+                const letter = String.fromCharCode(65 + letterIndex); // A, B, C...Z (uppercase)
                 const rollNumberPattern = `${yearPrefix}${campus.prefix}${deptCode}${letter}${digit}`;
                 const imageUrlPattern = `${campus.baseUrl}${rollNumberPattern}.jpg`;
                 
@@ -406,10 +406,10 @@ export const generateStudentData = (): Student[] => {
               });
             }
             
-            // Generate a0-z9 (26 letters * 10 digits = 260 more)
+            // Generate A0-Z9 (26 letters * 10 digits = 260 more)
             for (let letterIndex = 0; letterIndex < 26; letterIndex++) {
               for (let digit = 0; digit <= 9; digit++) {
-                const letter = String.fromCharCode(97 + letterIndex);
+                const letter = String.fromCharCode(65 + letterIndex); // A, B, C...Z (uppercase)
                 const rollNumberPattern = `${yearPrefix}${campus.prefix}${deptCode}${letter}${digit}`;
                 const imageUrlPattern = `${campus.baseUrl}${rollNumberPattern}.jpg`;
                 
