@@ -9,7 +9,7 @@ import { ParticleBackground } from '@/components/ParticleBackground';
 import { SearchAndFilters } from '@/components/SearchAndFilters';
 import { StudentCard } from '@/components/StudentCard';
 import { StudentModal } from '@/components/StudentModal';
-import { FloatingShapes, CursorTrail, GridPattern } from '@/components/ModernGraphics';
+import { FloatingShapes, GridPattern } from '@/components/ModernGraphics';
 import { ScrollReveal, ModernCard } from '@/components/InteractiveElements';
 
 import { Student, SearchFilters, generateStudentData } from '@/types/student';
@@ -47,11 +47,7 @@ const Index = () => {
       return matchesSearch && matchesCampus && matchesDepartment && matchesYear && matchesCollegeType;
     });
 
-    // If no filters applied, shuffle students for random display
-    if (!filters.searchTerm && !filters.selectedCampus && !filters.selectedDepartment && 
-        !filters.selectedYear && !filters.selectedCollegeType) {
-      filtered = [...filtered].sort(() => Math.random() - 0.5);
-    }
+    // Keep original order when no filters applied for consistent display
 
     return filtered;
   }, [students, filters]);
@@ -90,7 +86,6 @@ const Index = () => {
   return (
     <div className="min-h-screen relative">
       <FloatingShapes />
-      <CursorTrail />
       <GridPattern />
       
       {/* Hero Section */}
@@ -157,7 +152,7 @@ const Index = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.02, duration: 0.3 }}
-                whileHover={{ y: -5, scale: 1.02 }}
+                
               >
                 <StudentCard
                   student={student}

@@ -39,10 +39,6 @@ export const StudentCard = ({ student, onClick, index }: StudentCardProps) => {
         delay: index * 0.05,
         ease: "easeOut"
       }}
-      whileHover={{ 
-        y: -8,
-        transition: { duration: 0.2 }
-      }}
       className="group cursor-pointer"
       onClick={() => onClick(student)}
     >
