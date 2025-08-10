@@ -26,8 +26,10 @@ const Index = () => {
     selectedCollegeType: ''
   });
 
-  // Filter students based on search criteria
+  // Filter students based on search criteria with improved dependency handling
   const filteredStudents = useMemo(() => {
+    console.log('Filtering with:', filters); // Debug log
+    
     let filtered = students.filter(student => {
       const matchesSearch = !filters.searchTerm || 
         student.rollNumber.toLowerCase().includes(filters.searchTerm.toLowerCase());
@@ -47,10 +49,9 @@ const Index = () => {
       return matchesSearch && matchesCampus && matchesDepartment && matchesYear && matchesCollegeType;
     });
 
-    // Keep original order when no filters applied for consistent display
-
+    console.log('Filtered results:', filtered.length); // Debug log
     return filtered;
-  }, [students, filters]);
+  }, [students, filters.searchTerm, filters.selectedCampus, filters.selectedDepartment, filters.selectedYear, filters.selectedCollegeType]);
 
   const handleStudentClick = (student: Student) => {
     setSelectedStudent(student);

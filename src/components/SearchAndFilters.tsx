@@ -16,7 +16,9 @@ export const SearchAndFilters = ({
   filteredCount 
 }: SearchAndFiltersProps) => {
   const updateFilter = (key: keyof SearchFilters, value: string) => {
-    onFiltersChange({ ...filters, [key]: value });
+    console.log('Updating filter:', key, value); // Debug log
+    const newFilters = { ...filters, [key]: value };
+    onFiltersChange(newFilters);
   };
 
   const clearFilters = () => {
