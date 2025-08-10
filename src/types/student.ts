@@ -426,9 +426,10 @@ export const generateStudentData = (): Student[] => {
         });
       });
 
-      // Add Lateral Entry students for years 2015-2023 (since LE starts one year later)
-      const leYears = ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023'];
-      const leYearPrefixes = ['15', '16', '17', '18', '19', '20', '21', '22', '23'];
+      // Add Lateral Entry students (LE starts one year after the main year)
+      // For 2022 B-Tech, LE will be 2023 (23A95A...)
+      const leYears = ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'];
+      const leYearPrefixes = ['16', '17', '18', '19', '20', '21', '22', '23', '24', '25'];
       
       // Lateral Entry departments with their codes
       const leDepartments = [
