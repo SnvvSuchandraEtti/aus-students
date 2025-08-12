@@ -15,7 +15,12 @@ import { ScrollReveal, ModernCard } from '@/components/InteractiveElements';
 import { Student, SearchFilters, generateStudentData } from '@/types/student';
 
 const Index = () => {
-  const [students] = useState<Student[]>(() => generateStudentData());
+  const [students] = useState<Student[]>(() => {
+    console.log('Generating student data...');
+    const data = generateStudentData();
+    console.log('Generated students:', data.length);
+    return data;
+  });
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [filters, setFilters] = useState<SearchFilters>({
@@ -81,6 +86,8 @@ const Index = () => {
     };
   }, [isModalOpen]);
 
+  console.log('Rendering with', filteredStudents.length, 'filtered students');
+  
   return (
     <div className="min-h-screen relative">
       <FloatingShapes />
