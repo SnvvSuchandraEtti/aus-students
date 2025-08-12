@@ -28,8 +28,6 @@ const Index = () => {
 
   // Filter students based on search criteria with improved dependency handling
   const filteredStudents = useMemo(() => {
-    console.log('Filtering with:', filters); // Debug log
-    
     let filtered = students.filter(student => {
       const matchesSearch = !filters.searchTerm || 
         student.rollNumber.toLowerCase().includes(filters.searchTerm.toLowerCase());
@@ -49,7 +47,6 @@ const Index = () => {
       return matchesSearch && matchesCampus && matchesDepartment && matchesYear && matchesCollegeType;
     });
 
-    console.log('Filtered results:', filtered.length); // Debug log
     return filtered;
   }, [students, filters.searchTerm, filters.selectedCampus, filters.selectedDepartment, filters.selectedYear, filters.selectedCollegeType]);
 

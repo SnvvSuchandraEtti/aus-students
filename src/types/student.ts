@@ -296,25 +296,24 @@ export const generateStudentData = (): Student[] => {
     const relevantDepartments = getDepartmentsByType(campus.type);
     
     if (campus.type === 'engineering') {
-      // B-Tech: Years 2014-2023 (14-23)
-      const years = ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023'];
-      const yearPrefixes = ['14', '15', '16', '17', '18', '19', '20', '21', '22', '23'];
+      // B-Tech: Focus on recent years 2020-2023 for better performance
+      const years = ['2020', '2021', '2022', '2023'];
+      const yearPrefixes = ['20', '21', '22', '23'];
       
       relevantDepartments.forEach(department => {
         years.forEach((year, yearIndex) => {
           const yearPrefix = yearPrefixes[yearIndex];
           
-          // Generate regular B-Tech students
+          // Generate regular B-Tech students (reduced range for performance)
           if (campus.id === 'aec-btech') {
-            // Pattern: 14a91a0501 to 14a91a05z9
-            // Fix AIML department code for AEC campus
+            // Pattern: 20a91a0501 to 20a91a0550 (limited to 50 students per dept/year)
             let deptCode = department.code;
             if (department.id === 'aiml') {
               deptCode = '61'; // AEC campus uses 61 for AIML
             }
             
-            // Generate 01-99 first
-            for (let i = 1; i <= 99; i++) {
+            // Generate 01-50 (reduced for performance)
+            for (let i = 1; i <= 50; i++) {
               const num = i.toString().padStart(2, '0');
               const rollNumberPattern = `${yearPrefix}${campus.prefix}${deptCode}${num}`;
               const imageUrlPattern = `${campus.baseUrl}${rollNumberPattern}.jpg`;
@@ -327,33 +326,15 @@ export const generateStudentData = (): Student[] => {
                 imageUrl: imageUrlPattern
               });
             }
-            
-            // Generate A0-Z9 (26 letters * 10 digits = 260 more)
-            for (let letterIndex = 0; letterIndex < 26; letterIndex++) {
-              for (let digit = 0; digit <= 9; digit++) {
-                const letter = String.fromCharCode(65 + letterIndex); // A, B, C...Z (uppercase)
-                const rollNumberPattern = `${yearPrefix}${campus.prefix}${deptCode}${letter}${digit}`;
-                const imageUrlPattern = `${campus.baseUrl}${rollNumberPattern}.jpg`;
-                
-                students.push({
-                  rollNumber: rollNumberPattern,
-                  campus,
-                  department,
-                  year,
-                  imageUrl: imageUrlPattern
-                });
-              }
-            }
           } else if (campus.id === 'acet-btech') {
-            // Pattern: 14P31A0501 to 14P31A05z9
-            // Fix AIML department code for ACET campus
+            // Pattern: 20P31A0501 to 20P31A0550
             let deptCode = department.code;
             if (department.id === 'aiml') {
               deptCode = '42'; // ACET campus uses 42 for AIML
             }
             
-            // Generate 01-99 first
-            for (let i = 1; i <= 99; i++) {
+            // Generate 01-50 (reduced for performance)
+            for (let i = 1; i <= 50; i++) {
               const num = i.toString().padStart(2, '0');
               const rollNumberPattern = `${yearPrefix}${campus.prefix}${deptCode}${num}`;
               const imageUrlPattern = `${campus.baseUrl}${rollNumberPattern}.jpg`;
@@ -366,33 +347,15 @@ export const generateStudentData = (): Student[] => {
                 imageUrl: imageUrlPattern
               });
             }
-            
-            // Generate A0-Z9 (26 letters * 10 digits = 260 more)
-            for (let letterIndex = 0; letterIndex < 26; letterIndex++) {
-              for (let digit = 0; digit <= 9; digit++) {
-                const letter = String.fromCharCode(65 + letterIndex); // A, B, C...Z (uppercase)
-                const rollNumberPattern = `${yearPrefix}${campus.prefix}${deptCode}${letter}${digit}`;
-                const imageUrlPattern = `${campus.baseUrl}${rollNumberPattern}.jpg`;
-                
-                students.push({
-                  rollNumber: rollNumberPattern,
-                  campus,
-                  department,
-                  year,
-                  imageUrl: imageUrlPattern
-                });
-              }
-            }
           } else if (campus.id === 'acem-btech') {
-            // Pattern: 14MH1A0501 to 14MH1A05z9
-            // Fix AIML department code for ACEM campus
+            // Pattern: 20MH1A0501 to 20MH1A0550
             let deptCode = department.code;
             if (department.id === 'aiml') {
               deptCode = '42'; // ACEM campus uses 42 for AIML
             }
             
-            // Generate 01-99 first
-            for (let i = 1; i <= 99; i++) {
+            // Generate 01-50 (reduced for performance)
+            for (let i = 1; i <= 50; i++) {
               const num = i.toString().padStart(2, '0');
               const rollNumberPattern = `${yearPrefix}${campus.prefix}${deptCode}${num}`;
               const imageUrlPattern = `${campus.baseUrl}${rollNumberPattern}.jpg`;
@@ -405,63 +368,29 @@ export const generateStudentData = (): Student[] => {
                 imageUrl: imageUrlPattern
               });
             }
-            
-            // Generate A0-Z9 (26 letters * 10 digits = 260 more)
-            for (let letterIndex = 0; letterIndex < 26; letterIndex++) {
-              for (let digit = 0; digit <= 9; digit++) {
-                const letter = String.fromCharCode(65 + letterIndex); // A, B, C...Z (uppercase)
-                const rollNumberPattern = `${yearPrefix}${campus.prefix}${deptCode}${letter}${digit}`;
-                const imageUrlPattern = `${campus.baseUrl}${rollNumberPattern}.jpg`;
-                
-                students.push({
-                  rollNumber: rollNumberPattern,
-                  campus,
-                  department,
-                  year,
-                  imageUrl: imageUrlPattern
-                });
-              }
-            }
           }
         });
       });
 
-      // Add Lateral Entry students (LE starts one year after the main year)
+      // Add Lateral Entry students (reduced for performance)
       // For 2022 B-Tech, LE will be 2023 (23A95A...)
-      const leYears = ['2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'];
-      const leYearPrefixes = ['16', '17', '18', '19', '20', '21', '22', '23', '24', '25'];
+      const leYears = ['2022', '2023', '2024'];
+      const leYearPrefixes = ['23', '24', '25'];
       
-      // Lateral Entry departments with their codes
+      // Lateral Entry departments with their codes (reduced set)
       const leDepartments = [
         { ...DEPARTMENTS.find(d => d.id === 'ce')!, code: '5A01' },
-        { ...DEPARTMENTS.find(d => d.id === 'eee')!, code: '5A02' },
-        { ...DEPARTMENTS.find(d => d.id === 'me')!, code: '5A03' },
-        { ...DEPARTMENTS.find(d => d.id === 'ece')!, code: '5A04' },
         { ...DEPARTMENTS.find(d => d.id === 'cse')!, code: '5A05' },
-        { ...DEPARTMENTS.find(d => d.id === 'it')!, code: '5A12' },
-        { ...DEPARTMENTS.find(d => d.id === 'aiml')!, code: '5A61' }, // AEC campus
-        { ...DEPARTMENTS.find(d => d.id === 'aiml')!, code: '5A42', id: 'aiml-acet' }, // ACET campus
-        { ...DEPARTMENTS.find(d => d.id === 'aiml')!, code: '5A42', id: 'aiml-acem' }, // ACEM campus
-        { ...DEPARTMENTS.find(d => d.id === 'cse-ds')!, code: '5A44' },
-        { ...DEPARTMENTS.find(d => d.id === 'mining')!, code: '5A26' },
-        { ...DEPARTMENTS.find(d => d.id === 'petroleum')!, code: '5A27' },
-        { ...DEPARTMENTS.find(d => d.id === 'ae')!, code: '5A35' },
-        { ...DEPARTMENTS.find(d => d.id === 'iot')!, code: '5A49' }
+        { ...DEPARTMENTS.find(d => d.id === 'ece')!, code: '5A04' }
       ];
 
       CAMPUSES.filter(c => c.type === 'engineering').forEach(campus => {
         leDepartments.forEach(department => {
-          // Skip department if not applicable to campus
-          if ((department.id === 'aiml-acet' && campus.id !== 'acet-btech') ||
-              (department.id === 'aiml-acem' && campus.id !== 'acem-btech') ||
-              (department.id === 'aiml' && department.code === '5A61' && campus.id !== 'aec-btech')) {
-            return;
-          }
-
           leYears.forEach((year, yearIndex) => {
             const yearPrefix = leYearPrefixes[yearIndex];
             
-            for (let i = 1; i <= 99; i++) {
+            // Reduced range to 10 students per LE dept/year
+            for (let i = 1; i <= 10; i++) {
               const num = i.toString().padStart(2, '0');
               let rollNumberPattern = '';
               
@@ -478,7 +407,7 @@ export const generateStudentData = (): Student[] => {
               students.push({
                 rollNumber: rollNumberPattern,
                 campus,
-                department: department.id.includes('aiml') ? DEPARTMENTS.find(d => d.id === 'aiml')! : department,
+                department,
                 year,
                 imageUrl: imageUrlPattern
               });
@@ -487,16 +416,16 @@ export const generateStudentData = (): Student[] => {
         });
       });
     } else if (campus.type === 'diploma') {
-      // Diploma: Years 2017-2024 (17-24)
-      const years = ['2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024'];
-      const yearPrefixes = ['17', '18', '19', '20', '21', '22', '23', '24'];
+      // Diploma: Recent years only (2022-2024) - reduced for performance
+      const years = ['2022', '2023', '2024'];
+      const yearPrefixes = ['22', '23', '24'];
       
       relevantDepartments.forEach(department => {
         years.forEach((year, yearIndex) => {
           const yearPrefix = yearPrefixes[yearIndex];
           
-          // Pattern: 17255-M-001 to 17255-M-500
-          for (let i = 1; i <= 500; i++) {
+          // Pattern: 22255-M-001 to 22255-M-020 (reduced range)
+          for (let i = 1; i <= 20; i++) {
             const num = i.toString().padStart(3, '0');
             const rollNumber = `${yearPrefix}${campus.prefix}-${department.code}-${num}`;
             const imageUrl = `${campus.baseUrl}${rollNumber}.jpg`;
@@ -512,11 +441,10 @@ export const generateStudentData = (): Student[] => {
         });
       });
     } else if (campus.type === 'bba') {
-      // BBA: Years 2021-2023
+      // BBA: Recent years - reduced range
       const bbaData = [
-        { year: '2021', prefix: '1121', range: 500 },
-        { year: '2022', prefix: '1122', range: 500 },
-        { year: '2023', prefix: '1123', range: 500 }
+        { year: '2022', prefix: '1122', range: 30 },
+        { year: '2023', prefix: '1123', range: 30 }
       ];
       
       const bbaDept = relevantDepartments[0]; // BBA department
@@ -536,9 +464,9 @@ export const generateStudentData = (): Student[] => {
         }
       });
     } else if (campus.type === 'pharma') {
-      // Pharma: Pattern 61710 to 619500
+      // Pharma: Reduced range for performance
       const pharmaDept = relevantDepartments[0];
-      for (let i = 1710; i <= 9500; i++) {
+      for (let i = 1710; i <= 1750; i++) {
         const rollNumber = `6${i}`;
         const imageUrl = `${campus.baseUrl}${rollNumber}.jpg`;
         
@@ -546,14 +474,14 @@ export const generateStudentData = (): Student[] => {
           rollNumber,
           campus,
           department: pharmaDept,
-          year: '2020', // Default year for pharma
+          year: '2022', // Recent year
           imageUrl
         });
       }
     } else if (campus.type === 'forensic') {
-      // Forensic: Pattern campus=01 to campus=100000
+      // Forensic: Drastically reduced range
       const forensicDept = relevantDepartments[0];
-      for (let i = 1; i <= 100000; i++) {
+      for (let i = 1; i <= 50; i++) {
         const campusCode = i.toString().padStart(2, '0');
         const rollNumber = `FORENSIC-${campusCode}`;
         const imageUrl = `${campus.baseUrl}${campusCode}`;
@@ -562,12 +490,13 @@ export const generateStudentData = (): Student[] => {
           rollNumber,
           campus,
           department: forensicDept,
-          year: '2020', // Default year for forensic
+          year: '2022', // Recent year
           imageUrl
         });
       }
     }
   });
   
+  console.log(`Generated ${students.length} students total`);
   return students;
 };

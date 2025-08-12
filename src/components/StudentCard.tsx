@@ -12,23 +12,15 @@ interface StudentCardProps {
 export const StudentCard = ({ student, onClick, index }: StudentCardProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
-  const [shouldRender, setShouldRender] = useState(true);
 
   const handleImageError = () => {
     setImageError(true);
-    setShouldRender(false); // Hide the entire card when image fails
   };
 
   const handleImageLoad = () => {
     setImageLoaded(true);
     setImageError(false);
-    setShouldRender(true); // Show the card when image loads successfully
   };
-
-  // Don't render the card if image failed to load
-  if (!shouldRender && imageError) {
-    return null;
-  }
 
   return (
     <motion.div
@@ -45,22 +37,27 @@ export const StudentCard = ({ student, onClick, index }: StudentCardProps) => {
       <div className="glass-card rounded-2xl p-4 h-full transition-all duration-300 group-hover:shadow-2xl group-hover:shadow-primary/20">
         {/* Image Container */}
         <div className="relative aspect-[3/4] mb-3 overflow-hidden rounded-xl">
-          <motion.img
-            src={student.imageUrl}
-            alt={student.rollNumber}
-            className={`w-full h-full object-cover transition-all duration-300 group-hover:scale-105 ${
-              imageLoaded ? 'opacity-100' : 'opacity-0'
-            }`}
-            onLoad={handleImageLoad}
-            onError={handleImageError}
-            loading="lazy"
-          />
+          {!imageError ? (
+            <motion.img
+              src={student.imageUrl}
+              alt={student.rollNumber}
+              className={`w-full h-full object-cover transition-all duration-300 group-hover:scale-105 ${
+                imageLoaded ? 'opacity-100' : 'opacity-0'
+              }`}
+              onLoad={handleImageLoad}
+              onError={handleImageError}
+              loading="lazy"
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-muted/20 to-muted/40 flex items-center justify-center">
+              <User className="w-12 h-12 text-muted-foreground/50" />
+            </div>
+          )}
           
           {/* Loading shimmer */}
           {!imageLoaded && !imageError && (
             <div className="absolute inset-0 bg-gradient-to-r from-muted/20 via-muted/40 to-muted/20 animate-pulse" />
           )}
-          
         </div>
         
         {/* Card Content */}
