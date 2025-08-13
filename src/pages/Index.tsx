@@ -146,7 +146,7 @@ const Index = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 md:gap-4 mobile-grid tablet-grid tablet-lg-grid xs-mobile-grid"
           >
-            {filteredStudents.map((student, index) => (
+            {filteredStudents.slice(0, 120).map((student, index) => (
               <motion.div
                 key={student.rollNumber}
                 initial={{ opacity: 0, y: 20 }}
