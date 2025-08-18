@@ -47,7 +47,21 @@ const Index = () => {
       return matchesSearch && matchesCampus && matchesDepartment && matchesYear && matchesCollegeType;
     });
 
-    // Keep original order when no filters applied for consistent display
+    // Check if no filters are applied
+    const noFiltersApplied = !filters.searchTerm && !filters.selectedCampus && 
+                           !filters.selectedDepartment && !filters.selectedYear && 
+                           !filters.selectedCollegeType;
+
+    // If no filters applied, shuffle to show random diversity
+    if (noFiltersApplied) {
+      // Create a shuffled copy using Fisher-Yates algorithm
+      const shuffled = [...filtered];
+      for (let i = shuffled.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+      }
+      return shuffled;
+    }
 
     return filtered;
   }, [students, filters]);
