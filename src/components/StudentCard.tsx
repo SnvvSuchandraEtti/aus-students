@@ -7,21 +7,30 @@ interface StudentCardProps {
   student: Student;
   onClick: (student: Student) => void;
   index: number;
+  onImageLoad?: (rollNumber: string) => void;
+  onImageError?: (rollNumber: string) => void;
 }
 
-export const StudentCard = ({ student, onClick, index }: StudentCardProps) => {
+export const StudentCard = ({ student, onClick, index, onImageLoad, onImageError }: StudentCardProps) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
 
   const handleImageError = () => {
     setImageError(true);
     setImageLoaded(false);
+    onImageError?.(student.rollNumber);
   };
 
   const handleImageLoad = () => {
     setImageLoaded(true);
     setImageError(false);
+    onImageLoad?.(student.rollNumber);
   };
+
+  // Don't render if image has error - let parent handle filtering
+  if (imageError) {
+    return null;
+  }
 
   return (
     <motion.div
@@ -38,22 +47,16 @@ export const StudentCard = ({ student, onClick, index }: StudentCardProps) => {
       <div className="glass-card rounded-2xl p-4 h-full transition-all duration-300 group-hover:shadow-2xl group-hover:shadow-primary/20">
         {/* Image Container */}
         <div className="relative aspect-[3/4] mb-3 overflow-hidden rounded-xl">
-          {!imageError ? (
-            <motion.img
-              src={student.imageUrl}
-              alt={student.rollNumber}
-              className={`w-full h-full object-cover transition-all duration-300 group-hover:scale-105 ${
-                imageLoaded ? 'opacity-100' : 'opacity-0'
-              }`}
-              onLoad={handleImageLoad}
-              onError={handleImageError}
-              loading="lazy"
-            />
-          ) : (
-            <div className="w-full h-full bg-gradient-to-br from-muted/40 to-muted/60 flex items-center justify-center">
-              <User className="w-12 h-12 text-muted-foreground/50" />
-            </div>
-          )}
+          <motion.img
+            src={student.imageUrl}
+            alt={student.rollNumber}
+            className={`w-full h-full object-cover transition-all duration-300 group-hover:scale-105 ${
+              imageLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
+            onLoad={handleImageLoad}
+            onError={handleImageError}
+            loading="lazy"
+          />
           
           {/* Loading shimmer */}
           {!imageLoaded && !imageError && (

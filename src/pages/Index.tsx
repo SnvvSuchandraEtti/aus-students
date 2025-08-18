@@ -26,7 +26,11 @@ const Index = () => {
     selectedCollegeType: ''
   });
 
-  // Filter students based on search criteria
+  // Track students with valid images
+  const [validStudents, setValidStudents] = useState<Set<string>>(new Set());
+  const [invalidStudents, setInvalidStudents] = useState<Set<string>>(new Set());
+
+  // Filter students based on search criteria and image validity
   const filteredStudents = useMemo(() => {
     let filtered = students.filter(student => {
       const matchesSearch = !filters.searchTerm || 
@@ -44,7 +48,10 @@ const Index = () => {
       const matchesCollegeType = !filters.selectedCollegeType || 
         student.campus.type === filters.selectedCollegeType;
 
-      return matchesSearch && matchesCampus && matchesDepartment && matchesYear && matchesCollegeType;
+      // Only include students that don't have invalid images
+      const hasValidImage = !invalidStudents.has(student.rollNumber);
+
+      return matchesSearch && matchesCampus && matchesDepartment && matchesYear && matchesCollegeType && hasValidImage;
     });
 
     // Check if no filters are applied
@@ -64,7 +71,26 @@ const Index = () => {
     }
 
     return filtered;
-  }, [students, filters]);
+  }, [students, filters, invalidStudents]);
+
+  // Handle image validation callbacks
+  const handleImageLoad = (rollNumber: string) => {
+    setValidStudents(prev => new Set([...prev, rollNumber]));
+    setInvalidStudents(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(rollNumber);
+      return newSet;
+    });
+  };
+
+  const handleImageError = (rollNumber: string) => {
+    setInvalidStudents(prev => new Set([...prev, rollNumber]));
+    setValidStudents(prev => {
+      const newSet = new Set(prev);
+      newSet.delete(rollNumber);
+      return newSet;
+    });
+  };
 
   const handleStudentClick = (student: Student) => {
     setSelectedStudent(student);
@@ -172,6 +198,8 @@ const Index = () => {
                   student={student}
                   onClick={handleStudentClick}
                   index={index}
+                  onImageLoad={handleImageLoad}
+                  onImageError={handleImageError}
                 />
               </motion.div>
             ))}
