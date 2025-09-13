@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import { GraduationCap, Sparkles } from 'lucide-react';
 import AdityaLogo from '/lovable-uploads/61cec41c-2099-4569-a713-5fe165947d1f.png';
 import { Button } from '@/components/ui/button';
+import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 
 import { ParticleBackground } from '@/components/ParticleBackground';
 import { SearchAndFilters } from '@/components/SearchAndFilters';
@@ -18,6 +19,7 @@ const Index = () => {
   const [students] = useState<Student[]>(() => generateStudentData());
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState<SearchFilters>({
     searchTerm: '',
     selectedCampus: '',
@@ -25,6 +27,8 @@ const Index = () => {
     selectedYear: '',
     selectedCollegeType: ''
   });
+
+  const ITEMS_PER_PAGE = 1000;
 
   // Filter students based on search criteria
   const filteredStudents = useMemo(() => {
@@ -65,6 +69,20 @@ const Index = () => {
 
     return filtered;
   }, [students, filters]);
+
+  // Reset to first page when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [filters]);
+
+  // Paginate filtered students
+  const paginatedStudents = useMemo(() => {
+    const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+    const endIndex = startIndex + ITEMS_PER_PAGE;
+    return filteredStudents.slice(startIndex, endIndex);
+  }, [filteredStudents, currentPage]);
+
+  const totalPages = Math.ceil(filteredStudents.length / ITEMS_PER_PAGE);
 
   const handleStudentClick = (student: Student) => {
     setSelectedStudent(student);
@@ -160,7 +178,7 @@ const Index = () => {
             transition={{ duration: 0.6, delay: 0.4 }}
             className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 md:gap-4 mobile-grid tablet-grid tablet-lg-grid xs-mobile-grid"
           >
-            {filteredStudents.map((student, index) => (
+            {paginatedStudents.map((student, index) => (
               <motion.div
                 key={student.rollNumber}
                 initial={{ opacity: 0, y: 20 }}
@@ -178,6 +196,53 @@ const Index = () => {
           </motion.div>
         </ScrollReveal>
 
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <ScrollReveal>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="mt-12 flex justify-center"
+            >
+              <Pagination>
+                <PaginationContent>
+                  <PaginationItem>
+                    <PaginationPrevious 
+                      onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                      className={currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                    />
+                  </PaginationItem>
+                  
+                  {/* Show page numbers */}
+                  {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                    const pageNumber = Math.max(1, Math.min(totalPages - 4, currentPage - 2)) + i;
+                    if (pageNumber > totalPages) return null;
+                    
+                    return (
+                      <PaginationItem key={pageNumber}>
+                        <PaginationLink
+                          onClick={() => setCurrentPage(pageNumber)}
+                          isActive={currentPage === pageNumber}
+                          className="cursor-pointer"
+                        >
+                          {pageNumber}
+                        </PaginationLink>
+                      </PaginationItem>
+                    );
+                  })}
+                  
+                  <PaginationItem>
+                    <PaginationNext 
+                      onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                      className={currentPage === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
+                    />
+                  </PaginationItem>
+                </PaginationContent>
+              </Pagination>
+            </motion.div>
+          </ScrollReveal>
+        )}
 
         {/* No Results */}
         {filteredStudents.length === 0 && (
