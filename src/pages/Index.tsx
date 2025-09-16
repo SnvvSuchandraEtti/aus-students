@@ -19,6 +19,19 @@ import { Student, SearchFilters, generateStudentData } from '@/types/student';
 const Index = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [students] = useState<Student[]>(() => generateStudentData());
+  
+  // Create a consistent shuffled array for the home page (only shuffled once)
+  const [shuffledStudents] = useState<Student[]>(() => {
+    const studentData = generateStudentData();
+    const shuffled = [...studentData];
+    // Fisher-Yates shuffle algorithm
+    for (let i = shuffled.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+    }
+    return shuffled;
+  });
+  
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   
@@ -77,7 +90,18 @@ const Index = () => {
 
   // Filter students based on search criteria
   const filteredStudents = useMemo(() => {
-    let filtered = students.filter(student => {
+    // Check if no filters are applied first
+    const noFiltersApplied = !filters.searchTerm && !filters.selectedCampus && 
+                           !filters.selectedDepartment && !filters.selectedYear && 
+                           !filters.selectedCollegeType;
+
+    // If no filters applied, return the consistent shuffled home page array
+    if (noFiltersApplied) {
+      return shuffledStudents;
+    }
+
+    // Apply filters to the original students array
+    const filtered = students.filter(student => {
       const matchesSearch = !filters.searchTerm || 
         student.rollNumber.toLowerCase().includes(filters.searchTerm.toLowerCase());
       
@@ -96,24 +120,8 @@ const Index = () => {
       return matchesSearch && matchesCampus && matchesDepartment && matchesYear && matchesCollegeType;
     });
 
-    // Check if no filters are applied
-    const noFiltersApplied = !filters.searchTerm && !filters.selectedCampus && 
-                           !filters.selectedDepartment && !filters.selectedYear && 
-                           !filters.selectedCollegeType;
-
-    // If no filters applied, shuffle to show random diversity
-    if (noFiltersApplied) {
-      // Create a shuffled copy using Fisher-Yates algorithm
-      const shuffled = [...filtered];
-      for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-      }
-      return shuffled;
-    }
-
     return filtered;
-  }, [students, filters]);
+  }, [students, shuffledStudents, filters]);
 
   // Paginate filtered students
   const paginatedStudents = useMemo(() => {
