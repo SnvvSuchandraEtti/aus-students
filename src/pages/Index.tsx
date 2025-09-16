@@ -1,6 +1,7 @@
 import { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Suspense } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { GraduationCap, Sparkles } from 'lucide-react';
 import AdityaLogo from '/lovable-uploads/61cec41c-2099-4569-a713-5fe165947d1f.png';
 import { Button } from '@/components/ui/button';
@@ -16,19 +17,63 @@ import { ScrollReveal, ModernCard } from '@/components/InteractiveElements';
 import { Student, SearchFilters, generateStudentData } from '@/types/student';
 
 const Index = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [students] = useState<Student[]>(() => generateStudentData());
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [filters, setFilters] = useState<SearchFilters>({
-    searchTerm: '',
-    selectedCampus: '',
-    selectedDepartment: '',
-    selectedYear: '',
-    selectedCollegeType: ''
+  
+  // Initialize filters from URL parameters
+  const [filters, setFilters] = useState<SearchFilters>(() => ({
+    searchTerm: searchParams.get('search') || '',
+    selectedCampus: searchParams.get('campus') || '',
+    selectedDepartment: searchParams.get('dept') || '',
+    selectedYear: searchParams.get('year') || '',
+    selectedCollegeType: searchParams.get('program') || ''
+  }));
+  
+  // Initialize current page from URL
+  const [currentPage, setCurrentPage] = useState(() => {
+    const page = searchParams.get('page');
+    return page ? parseInt(page, 10) : 1;
   });
 
   const ITEMS_PER_PAGE = 1000;
+
+  // Update URL when filters change
+  useEffect(() => {
+    const params = new URLSearchParams();
+    
+    if (filters.searchTerm) params.set('search', filters.searchTerm);
+    if (filters.selectedCampus) params.set('campus', filters.selectedCampus);
+    if (filters.selectedDepartment) params.set('dept', filters.selectedDepartment);
+    if (filters.selectedYear) params.set('year', filters.selectedYear);
+    if (filters.selectedCollegeType) params.set('program', filters.selectedCollegeType);
+    if (currentPage > 1) params.set('page', currentPage.toString());
+    
+    setSearchParams(params, { replace: true });
+  }, [filters, currentPage, setSearchParams]);
+
+  // Update filters when URL changes (browser back/forward)
+  useEffect(() => {
+    const urlFilters = {
+      searchTerm: searchParams.get('search') || '',
+      selectedCampus: searchParams.get('campus') || '',
+      selectedDepartment: searchParams.get('dept') || '',
+      selectedYear: searchParams.get('year') || '',
+      selectedCollegeType: searchParams.get('program') || ''
+    };
+    
+    setFilters(urlFilters);
+    
+    const page = searchParams.get('page');
+    setCurrentPage(page ? parseInt(page, 10) : 1);
+  }, [searchParams]);
+
+  // Custom filter handler that resets page to 1
+  const handleFiltersChange = (newFilters: SearchFilters) => {
+    setFilters(newFilters);
+    setCurrentPage(1);
+  };
 
   // Filter students based on search criteria
   const filteredStudents = useMemo(() => {
@@ -69,11 +114,6 @@ const Index = () => {
 
     return filtered;
   }, [students, filters]);
-
-  // Reset to first page when filters change
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [filters]);
 
   // Paginate filtered students
   const paginatedStudents = useMemo(() => {
@@ -163,7 +203,7 @@ const Index = () => {
           <ScrollReveal>
             <SearchAndFilters
               filters={filters}
-              onFiltersChange={setFilters}
+              onFiltersChange={handleFiltersChange}
               totalStudents={students.length}
               filteredCount={filteredStudents.length}
             />
@@ -274,7 +314,7 @@ const Index = () => {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  onClick={() => setFilters({
+                  onClick={() => handleFiltersChange({
                     searchTerm: '',
                     selectedCampus: '',
                     selectedDepartment: '',
