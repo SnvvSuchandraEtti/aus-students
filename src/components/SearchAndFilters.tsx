@@ -82,7 +82,20 @@ export const SearchAndFilters = ({
   filteredCount 
 }: SearchAndFiltersProps) => {
   const updateFilter = (key: keyof SearchFilters, value: string) => {
-    onFiltersChange({ ...filters, [key]: value });
+    const newFilters = { ...filters, [key]: value };
+    
+    // Cascade reset: when program changes, reset dependent filters
+    if (key === 'selectedCollegeType') {
+      newFilters.selectedCampus = '';
+      newFilters.selectedDepartment = '';
+      newFilters.selectedYear = '';
+    }
+    // When campus changes, reset department
+    if (key === 'selectedCampus') {
+      newFilters.selectedDepartment = '';
+    }
+    
+    onFiltersChange(newFilters);
   };
 
   const clearFilters = () => {

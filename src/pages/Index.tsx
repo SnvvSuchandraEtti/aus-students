@@ -2,9 +2,8 @@ import { useState, useMemo, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Suspense } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { GraduationCap, Sparkles } from 'lucide-react';
+import { GraduationCap } from 'lucide-react';
 import AdityaLogo from '/lovable-uploads/61cec41c-2099-4569-a713-5fe165947d1f.png';
-import { Button } from '@/components/ui/button';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 
 import { ParticleBackground } from '@/components/ParticleBackground';
@@ -52,7 +51,7 @@ const Index = () => {
 
   const ITEMS_PER_PAGE = 1000;
 
-  // Update URL when filters change
+  // Sync filters to URL (single effect, no loop)
   useEffect(() => {
     const params = new URLSearchParams();
     
@@ -65,22 +64,6 @@ const Index = () => {
     
     setSearchParams(params, { replace: true });
   }, [filters, currentPage, setSearchParams]);
-
-  // Update filters when URL changes (browser back/forward)
-  useEffect(() => {
-    const urlFilters = {
-      searchTerm: searchParams.get('search') || '',
-      selectedCampus: searchParams.get('campus') || '',
-      selectedDepartment: searchParams.get('dept') || '',
-      selectedYear: searchParams.get('year') || '',
-      selectedCollegeType: searchParams.get('program') || ''
-    };
-    
-    setFilters(urlFilters);
-    
-    const page = searchParams.get('page');
-    setCurrentPage(page ? parseInt(page, 10) : 1);
-  }, [searchParams]);
 
   // Custom filter handler that resets page to 1
   const handleFiltersChange = (newFilters: SearchFilters) => {

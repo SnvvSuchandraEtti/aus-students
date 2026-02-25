@@ -535,36 +535,49 @@ export const generateStudentData = (): Student[] => {
         }
       });
     } else if (campus.type === 'pharma') {
-      // Pharma: Pattern 61710 to 619500
+      // Pharma: Years 2014-2023, proper year distribution
+      const pharmaYears = ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023'];
       const pharmaDept = relevantDepartments[0];
-      for (let i = 1710; i <= 9500; i++) {
-        const rollNumber = `6${i}`;
-        const imageUrl = `${campus.baseUrl}${rollNumber}.jpg`;
-        
-        students.push({
-          rollNumber,
-          campus,
-          department: pharmaDept,
-          year: '2020', // Default year for pharma
-          imageUrl
-        });
-      }
+      
+      pharmaYears.forEach((year) => {
+        const yearSuffix = year.slice(2); // "14", "15", etc.
+        // Pattern: 6{yearSuffix}001 to 6{yearSuffix}500
+        for (let i = 1; i <= 500; i++) {
+          const num = i.toString().padStart(3, '0');
+          const rollNumber = `6${yearSuffix}${num}`;
+          const imageUrl = `${campus.baseUrl}${rollNumber}.jpg`;
+          
+          students.push({
+            rollNumber,
+            campus,
+            department: pharmaDept,
+            year,
+            imageUrl
+          });
+        }
+      });
     } else if (campus.type === 'forensic') {
-      // Forensic: Pattern campus=01 to campus=100000
+      // Forensic: Years 2014-2023
+      const forensicYears = ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023'];
       const forensicDept = relevantDepartments[0];
-      for (let i = 1; i <= 100000; i++) {
-        const campusCode = i.toString().padStart(2, '0');
-        const rollNumber = `FORENSIC-${campusCode}`;
-        const imageUrl = `${campus.baseUrl}${campusCode}`;
-        
-        students.push({
-          rollNumber,
-          campus,
-          department: forensicDept,
-          year: '2020', // Default year for forensic
-          imageUrl
-        });
-      }
+      
+      forensicYears.forEach((year) => {
+        const yearSuffix = year.slice(2);
+        // Pattern: FR{yearSuffix}001 to FR{yearSuffix}200
+        for (let i = 1; i <= 200; i++) {
+          const num = i.toString().padStart(3, '0');
+          const rollNumber = `FR${yearSuffix}${num}`;
+          const imageUrl = `${campus.baseUrl}${i}`;
+          
+          students.push({
+            rollNumber,
+            campus,
+            department: forensicDept,
+            year,
+            imageUrl
+          });
+        }
+      });
     }
   });
   
