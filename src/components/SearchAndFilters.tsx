@@ -2,6 +2,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, X, SlidersHorizontal, GraduationCap, Building2, BookOpen, Calendar, Sparkles } from 'lucide-react';
 import { SearchFilters, CAMPUSES, DEPARTMENTS, COLLEGE_TYPES, getDepartmentsByType } from '@/types/student';
 import { Badge } from '@/components/ui/badge';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useMemo } from 'react';
 
 interface SearchAndFiltersProps {
@@ -58,8 +59,20 @@ const getYearOptions = (collegeType: string) => {
         { value: '2022', label: '2022-26' },
         { value: '2023', label: '2023-27' },
       ];
+    case 'forensic':
+      return [
+        { value: '2014', label: '2014' },
+        { value: '2015', label: '2015' },
+        { value: '2016', label: '2016' },
+        { value: '2017', label: '2017' },
+        { value: '2018', label: '2018' },
+        { value: '2019', label: '2019' },
+        { value: '2020', label: '2020' },
+        { value: '2021', label: '2021' },
+        { value: '2022', label: '2022' },
+        { value: '2023', label: '2023' },
+      ];
     default:
-      // Default: regular years
       return [
         { value: '2014', label: '2014' },
         { value: '2015', label: '2015' },
@@ -84,13 +97,11 @@ export const SearchAndFilters = ({
   const updateFilter = (key: keyof SearchFilters, value: string) => {
     const newFilters = { ...filters, [key]: value };
     
-    // Cascade reset: when program changes, reset dependent filters
     if (key === 'selectedCollegeType') {
       newFilters.selectedCampus = '';
       newFilters.selectedDepartment = '';
       newFilters.selectedYear = '';
     }
-    // When campus changes, reset department
     if (key === 'selectedCampus') {
       newFilters.selectedDepartment = '';
     }
@@ -123,14 +134,49 @@ export const SearchAndFilters = ({
 
   const yearOptions = useMemo(() => getYearOptions(filters.selectedCollegeType), [filters.selectedCollegeType]);
 
-  const showCampusDept = filters.selectedCollegeType !== 'bba' && filters.selectedCollegeType !== 'forensic';
+  // Hide campus/dept for single-option programs
+  const showCampusDept = filters.selectedCollegeType !== 'bba' && 
+                         filters.selectedCollegeType !== 'forensic' && 
+                         filters.selectedCollegeType !== 'pharma';
+
+  const filteredCampuses = useMemo(() => 
+    CAMPUSES.filter(campus => !filters.selectedCollegeType || campus.type === filters.selectedCollegeType),
+    [filters.selectedCollegeType]
+  );
+
+  const filteredDepartments = useMemo(() => 
+    filters.selectedCollegeType ? getDepartmentsByType(filters.selectedCollegeType) : DEPARTMENTS,
+    [filters.selectedCollegeType]
+  );
+
+  // Active filter chips
+  const activeChips = useMemo(() => {
+    const chips: { key: keyof SearchFilters; label: string }[] = [];
+    if (filters.selectedCollegeType) {
+      const ct = COLLEGE_TYPES.find(t => t.id === filters.selectedCollegeType);
+      if (ct) chips.push({ key: 'selectedCollegeType', label: `${ct.icon} ${ct.name}` });
+    }
+    if (filters.selectedCampus) {
+      const c = CAMPUSES.find(c => c.id === filters.selectedCampus);
+      if (c) chips.push({ key: 'selectedCampus', label: c.name });
+    }
+    if (filters.selectedDepartment) {
+      const d = DEPARTMENTS.find(d => d.id === filters.selectedDepartment);
+      if (d) chips.push({ key: 'selectedDepartment', label: `${d.icon} ${d.name}` });
+    }
+    if (filters.selectedYear) {
+      const y = yearOptions.find(o => o.value === filters.selectedYear);
+      if (y) chips.push({ key: 'selectedYear', label: y.label });
+    }
+    return chips;
+  }, [filters, yearOptions]);
 
   return (
     <motion.div
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
-      className="relative rounded-2xl mb-6 sm:mb-8 sticky top-2 sm:top-4 z-40 overflow-hidden"
+      className="relative rounded-2xl mb-6 sm:mb-8 sticky top-2 sm:top-4 z-40 overflow-visible"
     >
       {/* Gradient border effect */}
       <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-primary/30 via-accent/20 to-primary/30 p-[1px]">
@@ -138,7 +184,7 @@ export const SearchAndFilters = ({
       </div>
 
       <div className="relative p-4 sm:p-6">
-        {/* Header with filter count */}
+        {/* Header */}
         <div className="flex items-center justify-between mb-4 sm:mb-5">
           <div className="flex items-center gap-2">
             <div className="p-2 rounded-lg bg-primary/10">
@@ -147,11 +193,7 @@ export const SearchAndFilters = ({
             <h3 className="text-sm font-semibold text-foreground tracking-wide uppercase">Filters</h3>
             <AnimatePresence>
               {activeFilterCount > 0 && (
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  exit={{ scale: 0 }}
-                >
+                <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} exit={{ scale: 0 }}>
                   <Badge className="bg-primary text-primary-foreground text-[10px] px-2 py-0.5">
                     {activeFilterCount} active
                   </Badge>
@@ -166,8 +208,6 @@ export const SearchAndFilters = ({
                 initial={{ opacity: 0, x: 10 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: 10 }}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
                 onClick={clearFilters}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-destructive/10 text-destructive hover:bg-destructive/20 border border-destructive/20 transition-colors"
               >
@@ -191,86 +231,89 @@ export const SearchAndFilters = ({
             className="w-full pl-12 pr-10 py-3 bg-muted/40 border border-border/60 rounded-xl focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50 focus:bg-muted/60 transition-all duration-300 text-foreground placeholder:text-muted-foreground text-sm"
           />
           {filters.searchTerm && (
-            <motion.button
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              whileTap={{ scale: 0.9 }}
+            <button
               onClick={() => updateFilter('searchTerm', '')}
               className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full bg-muted/60 hover:bg-muted transition-colors"
             >
               <X className="w-3.5 h-3.5 text-muted-foreground" />
-            </motion.button>
+            </button>
           )}
         </div>
 
-        {/* Filter Grid */}
+        {/* Filter Grid - Radix Select */}
         <div className={`grid grid-cols-1 sm:grid-cols-2 gap-3 ${
           showCampusDept ? 'lg:grid-cols-4' : 'lg:grid-cols-2'
         }`}>
-          {/* Program Filter */}
-          <FilterSelect
+          {/* Program */}
+          <FilterRadixSelect
             icon={<GraduationCap className="w-4 h-4 text-primary" />}
             label="Program"
             value={filters.selectedCollegeType}
             onChange={(v) => updateFilter('selectedCollegeType', v)}
-          >
-            <option value="">All Programs</option>
-            {COLLEGE_TYPES.map(type => (
-              <option key={type.id} value={type.id}>
-                {type.icon} {type.name}
-              </option>
-            ))}
-          </FilterSelect>
+            placeholder="All Programs"
+            options={COLLEGE_TYPES.map(t => ({ value: t.id, label: `${t.icon} ${t.name}` }))}
+          />
 
-          {/* Campus Filter */}
+          {/* Campus */}
           {showCampusDept && (
-            <FilterSelect
+            <FilterRadixSelect
               icon={<Building2 className="w-4 h-4 text-primary" />}
               label="Campus"
               value={filters.selectedCampus}
               onChange={(v) => updateFilter('selectedCampus', v)}
-            >
-              <option value="">All Campuses</option>
-              {CAMPUSES
-                .filter(campus => !filters.selectedCollegeType || campus.type === filters.selectedCollegeType)
-                .map(campus => (
-                  <option key={campus.id} value={campus.id}>
-                    {campus.name} - {campus.fullName.split('(')[1]?.replace(')', '') || campus.fullName}
-                  </option>
-                ))}
-            </FilterSelect>
+              placeholder="All Campuses"
+              options={filteredCampuses.map(c => ({ value: c.id, label: c.name }))}
+            />
           )}
 
-          {/* Department Filter */}
+          {/* Department */}
           {showCampusDept && (
-            <FilterSelect
+            <FilterRadixSelect
               icon={<BookOpen className="w-4 h-4 text-primary" />}
               label="Department"
               value={filters.selectedDepartment}
               onChange={(v) => updateFilter('selectedDepartment', v)}
-            >
-              <option value="">All Departments</option>
-              {(filters.selectedCollegeType ? getDepartmentsByType(filters.selectedCollegeType) : DEPARTMENTS).map(dept => (
-                <option key={dept.id} value={dept.id}>
-                  {dept.icon} {dept.name} - {dept.fullName}
-                </option>
-              ))}
-            </FilterSelect>
+              placeholder="All Departments"
+              options={filteredDepartments.map(d => ({ value: d.id, label: `${d.icon} ${d.name}` }))}
+            />
           )}
 
-          {/* Year Filter */}
-          <FilterSelect
+          {/* Year */}
+          <FilterRadixSelect
             icon={<Calendar className="w-4 h-4 text-primary" />}
             label={filters.selectedCollegeType === 'engineering' ? 'Batch' : 'Year'}
             value={filters.selectedYear}
             onChange={(v) => updateFilter('selectedYear', v)}
-          >
-            <option value="">{filters.selectedCollegeType === 'engineering' ? 'All Batches' : 'All Years'}</option>
-            {yearOptions.map(opt => (
-              <option key={opt.value} value={opt.value}>{opt.label}</option>
-            ))}
-          </FilterSelect>
+            placeholder={filters.selectedCollegeType === 'engineering' ? 'All Batches' : 'All Years'}
+            options={yearOptions.map(o => ({ value: o.value, label: o.label }))}
+          />
         </div>
+
+        {/* Filter Chips */}
+        <AnimatePresence>
+          {activeChips.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="mt-3 flex flex-wrap gap-2"
+            >
+              {activeChips.map(chip => (
+                <motion.button
+                  key={chip.key}
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  exit={{ scale: 0 }}
+                  onClick={() => updateFilter(chip.key, '')}
+                  className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors"
+                >
+                  {chip.label}
+                  <X className="w-3 h-3" />
+                </motion.button>
+              ))}
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* Results indicator */}
         <AnimatePresence>
@@ -279,7 +322,7 @@ export const SearchAndFilters = ({
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
-              className="mt-4 pt-3 border-t border-border/40"
+              className="mt-3 pt-3 border-t border-border/40"
             >
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <Sparkles className="w-3.5 h-3.5 text-primary" />
@@ -296,31 +339,39 @@ export const SearchAndFilters = ({
   );
 };
 
-/* Reusable filter select with icon + label */
-const FilterSelect = ({
+/* Radix Select filter component */
+const FilterRadixSelect = ({
   icon,
   label,
   value,
   onChange,
-  children,
+  placeholder,
+  options,
 }: {
   icon: React.ReactNode;
   label: string;
   value: string;
   onChange: (v: string) => void;
-  children: React.ReactNode;
+  placeholder: string;
+  options: { value: string; label: string }[];
 }) => (
-  <motion.div whileHover={{ scale: 1.01 }} className="space-y-1.5">
+  <div className="space-y-1.5">
     <label className="flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
       {icon}
       {label}
     </label>
-    <select
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      className="w-full p-2.5 text-sm bg-muted/40 border border-border/60 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/50 transition-all duration-200 text-foreground"
-    >
-      {children}
-    </select>
-  </motion.div>
+    <Select value={value || undefined} onValueChange={(v) => onChange(v === '__all__' ? '' : v)}>
+      <SelectTrigger className="w-full bg-muted/40 border-border/60 rounded-lg text-sm h-10">
+        <SelectValue placeholder={placeholder} />
+      </SelectTrigger>
+      <SelectContent className="bg-popover border-border z-50">
+        <SelectItem value="__all__">{placeholder}</SelectItem>
+        {options.map(opt => (
+          <SelectItem key={opt.value} value={opt.value}>
+            {opt.label}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  </div>
 );
