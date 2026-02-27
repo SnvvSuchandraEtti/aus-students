@@ -29,6 +29,7 @@ export interface SearchFilters {
   selectedDepartment: string;
   selectedYear: string;
   selectedCollegeType: string;
+  isLateralEntry: boolean;
 }
 
 // Campus data with all college types

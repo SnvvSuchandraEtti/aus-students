@@ -41,7 +41,8 @@ const Index = () => {
     selectedCampus: searchParams.get('campus') || '',
     selectedDepartment: searchParams.get('dept') || '',
     selectedYear: searchParams.get('year') || '',
-    selectedCollegeType: searchParams.get('program') || ''
+    selectedCollegeType: searchParams.get('program') || '',
+    isLateralEntry: searchParams.get('le') === '1'
   }));
   
   const [currentPage, setCurrentPage] = useState(() => {
@@ -57,6 +58,7 @@ const Index = () => {
     if (filters.selectedDepartment) params.set('dept', filters.selectedDepartment);
     if (filters.selectedYear) params.set('year', filters.selectedYear);
     if (filters.selectedCollegeType) params.set('program', filters.selectedCollegeType);
+    if (filters.isLateralEntry) params.set('le', '1');
     if (currentPage > 1) params.set('page', currentPage.toString());
     setSearchParams(params, { replace: true });
   }, [filters, currentPage, setSearchParams]);
@@ -84,7 +86,13 @@ const Index = () => {
         student.year === filters.selectedYear;
       const matchesCollegeType = !filters.selectedCollegeType || 
         student.campus.type === filters.selectedCollegeType;
-      return matchesSearch && matchesCampus && matchesDepartment && matchesYear && matchesCollegeType;
+      
+      // LE filtering for B-Tech
+      const isLE = student.rollNumber.toUpperCase().includes('5A');
+      const matchesLE = filters.selectedCollegeType !== 'engineering' || 
+        (filters.isLateralEntry ? isLE : !isLE);
+      
+      return matchesSearch && matchesCampus && matchesDepartment && matchesYear && matchesCollegeType && matchesLE;
     });
   }, [students, shuffledStudents, filters]);
 
@@ -244,7 +252,8 @@ const Index = () => {
                   selectedCampus: '',
                   selectedDepartment: '',
                   selectedYear: '',
-                  selectedCollegeType: ''
+                  selectedCollegeType: '',
+                  isLateralEntry: false
                 })}
                 className="px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-colors"
               >
