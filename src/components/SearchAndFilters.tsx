@@ -1,8 +1,9 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, X, SlidersHorizontal, GraduationCap, Building2, BookOpen, Calendar, Sparkles } from 'lucide-react';
+import { Search, X, SlidersHorizontal, GraduationCap, Building2, BookOpen, Calendar, Sparkles, Users } from 'lucide-react';
 import { SearchFilters, CAMPUSES, DEPARTMENTS, COLLEGE_TYPES, getDepartmentsByType } from '@/types/student';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 import { useMemo } from 'react';
 
 interface SearchAndFiltersProps {
@@ -94,13 +95,14 @@ export const SearchAndFilters = ({
   totalStudents, 
   filteredCount 
 }: SearchAndFiltersProps) => {
-  const updateFilter = (key: keyof SearchFilters, value: string) => {
+  const updateFilter = (key: keyof SearchFilters, value: string | boolean) => {
     const newFilters = { ...filters, [key]: value };
     
     if (key === 'selectedCollegeType') {
       newFilters.selectedCampus = '';
       newFilters.selectedDepartment = '';
       newFilters.selectedYear = '';
+      newFilters.isLateralEntry = false;
     }
     if (key === 'selectedCampus') {
       newFilters.selectedDepartment = '';
@@ -115,12 +117,14 @@ export const SearchAndFilters = ({
       selectedCampus: '',
       selectedDepartment: '',
       selectedYear: '',
-      selectedCollegeType: ''
+      selectedCollegeType: '',
+      isLateralEntry: false
     });
   };
 
   const hasActiveFilters = filters.searchTerm || filters.selectedCampus || 
-                          filters.selectedDepartment || filters.selectedYear || filters.selectedCollegeType;
+                          filters.selectedDepartment || filters.selectedYear || 
+                          filters.selectedCollegeType || filters.isLateralEntry;
 
   const activeFilterCount = useMemo(() => {
     let count = 0;
@@ -129,6 +133,7 @@ export const SearchAndFilters = ({
     if (filters.selectedDepartment) count++;
     if (filters.selectedYear) count++;
     if (filters.selectedCollegeType) count++;
+    if (filters.isLateralEntry) count++;
     return count;
   }, [filters]);
 
@@ -151,22 +156,25 @@ export const SearchAndFilters = ({
 
   // Active filter chips
   const activeChips = useMemo(() => {
-    const chips: { key: keyof SearchFilters; label: string }[] = [];
+    const chips: { key: keyof SearchFilters; label: string; clearValue: string | boolean }[] = [];
     if (filters.selectedCollegeType) {
       const ct = COLLEGE_TYPES.find(t => t.id === filters.selectedCollegeType);
-      if (ct) chips.push({ key: 'selectedCollegeType', label: `${ct.icon} ${ct.name}` });
+      if (ct) chips.push({ key: 'selectedCollegeType', label: `${ct.icon} ${ct.name}`, clearValue: '' });
+    }
+    if (filters.isLateralEntry) {
+      chips.push({ key: 'isLateralEntry', label: '🔄 Lateral Entry', clearValue: false });
     }
     if (filters.selectedCampus) {
       const c = CAMPUSES.find(c => c.id === filters.selectedCampus);
-      if (c) chips.push({ key: 'selectedCampus', label: c.name });
+      if (c) chips.push({ key: 'selectedCampus', label: c.name, clearValue: '' });
     }
     if (filters.selectedDepartment) {
       const d = DEPARTMENTS.find(d => d.id === filters.selectedDepartment);
-      if (d) chips.push({ key: 'selectedDepartment', label: `${d.icon} ${d.name}` });
+      if (d) chips.push({ key: 'selectedDepartment', label: `${d.icon} ${d.name}`, clearValue: '' });
     }
     if (filters.selectedYear) {
       const y = yearOptions.find(o => o.value === filters.selectedYear);
-      if (y) chips.push({ key: 'selectedYear', label: y.label });
+      if (y) chips.push({ key: 'selectedYear', label: y.label, clearValue: '' });
     }
     return chips;
   }, [filters, yearOptions]);
@@ -289,7 +297,31 @@ export const SearchAndFilters = ({
           />
         </div>
 
-        {/* Filter Chips */}
+        {/* LE Toggle - only for B-Tech */}
+        <AnimatePresence>
+          {filters.selectedCollegeType === 'engineering' && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="mt-3"
+            >
+              <div className="flex items-center gap-3 px-3 py-2.5 rounded-xl bg-muted/40 border border-border/60 w-fit">
+                <Users className="w-4 h-4 text-primary" />
+                <span className={`text-xs font-medium transition-colors ${!filters.isLateralEntry ? 'text-foreground' : 'text-muted-foreground'}`}>
+                  Regular
+                </span>
+                <Switch
+                  checked={filters.isLateralEntry}
+                  onCheckedChange={(checked) => updateFilter('isLateralEntry', checked)}
+                />
+                <span className={`text-xs font-medium transition-colors ${filters.isLateralEntry ? 'text-foreground' : 'text-muted-foreground'}`}>
+                  Lateral Entry
+                </span>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
         <AnimatePresence>
           {activeChips.length > 0 && (
             <motion.div
@@ -304,7 +336,7 @@ export const SearchAndFilters = ({
                   initial={{ scale: 0 }}
                   animate={{ scale: 1 }}
                   exit={{ scale: 0 }}
-                  onClick={() => updateFilter(chip.key, '')}
+                  onClick={() => updateFilter(chip.key, chip.clearValue)}
                   className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-colors"
                 >
                   {chip.label}
