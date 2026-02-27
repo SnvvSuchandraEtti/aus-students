@@ -10,6 +10,8 @@ import { ParticleBackground } from '@/components/ParticleBackground';
 import { SearchAndFilters } from '@/components/SearchAndFilters';
 import { StudentCard } from '@/components/StudentCard';
 import { StudentModal } from '@/components/StudentModal';
+import { AnalyticsDashboard } from '@/components/AnalyticsDashboard';
+import { ExportShareActions } from '@/components/ExportShareActions';
 import { FloatingShapes, GridPattern } from '@/components/ModernGraphics';
 import { ScrollReveal, ModernCard } from '@/components/InteractiveElements';
 
@@ -20,10 +22,8 @@ const ITEMS_PER_PAGE = 150;
 const Index = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   
-  // Generate data ONCE (cached at module level)
   const students = useMemo(() => generateStudentData(), []);
   
-  // Shuffle once for home page display
   const shuffledStudents = useMemo(() => {
     const shuffled = [...students];
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -87,7 +87,6 @@ const Index = () => {
       const matchesCollegeType = !filters.selectedCollegeType || 
         student.campus.type === filters.selectedCollegeType;
       
-      // LE filtering for B-Tech
       const isLE = student.rollNumber.toUpperCase().includes('5A');
       const matchesLE = filters.selectedCollegeType !== 'engineering' || 
         (filters.isLateralEntry ? isLE : !isLE);
@@ -113,9 +112,23 @@ const Index = () => {
     setSelectedStudent(null);
   }, []);
 
+  const handleNavigateStudent = useCallback((student: Student) => {
+    setSelectedStudent(student);
+  }, []);
+
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') handleCloseModal();
+      // Arrow key navigation in modal
+      if (isModalOpen && selectedStudent) {
+        const idx = filteredStudents.findIndex(s => s.rollNumber === selectedStudent.rollNumber);
+        if (e.key === 'ArrowLeft' && idx > 0) {
+          handleNavigateStudent(filteredStudents[idx - 1]);
+        }
+        if (e.key === 'ArrowRight' && idx < filteredStudents.length - 1) {
+          handleNavigateStudent(filteredStudents[idx + 1]);
+        }
+      }
     };
     if (isModalOpen) {
       document.addEventListener('keydown', handleEscape);
@@ -127,7 +140,7 @@ const Index = () => {
       document.removeEventListener('keydown', handleEscape);
       document.body.style.overflow = 'unset';
     };
-  }, [isModalOpen, handleCloseModal]);
+  }, [isModalOpen, handleCloseModal, selectedStudent, filteredStudents, handleNavigateStudent]);
 
   return (
     <div className="min-h-screen relative">
@@ -169,7 +182,7 @@ const Index = () => {
 
       {/* Main Content */}
       <div className="container mx-auto px-4 pb-16">
-        <section id="search-section" className="mb-8 sm:mb-12">
+        <section id="search-section" className="mb-6 sm:mb-8">
           <ScrollReveal>
             <SearchAndFilters
               filters={filters}
@@ -180,7 +193,18 @@ const Index = () => {
           </ScrollReveal>
         </section>
 
-        {/* Student Gallery - no per-card framer-motion delays */}
+        {/* Export/Share Row */}
+        <div className="flex items-center justify-between mb-4">
+          <p className="text-xs text-muted-foreground">
+            {filteredStudents.length.toLocaleString()} students
+          </p>
+          <ExportShareActions filteredStudents={filteredStudents} />
+        </div>
+
+        {/* Analytics Dashboard */}
+        <AnalyticsDashboard students={students} filteredStudents={filteredStudents} />
+
+        {/* Student Gallery */}
         <ScrollReveal>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 md:gap-4">
             {paginatedStudents.map((student, index) => (
@@ -268,6 +292,8 @@ const Index = () => {
         student={selectedStudent}
         isOpen={isModalOpen}
         onClose={handleCloseModal}
+        filteredStudents={paginatedStudents}
+        onNavigate={handleNavigateStudent}
       />
     </div>
   );
