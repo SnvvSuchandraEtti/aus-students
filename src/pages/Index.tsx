@@ -10,7 +10,7 @@ import { ParticleBackground } from '@/components/ParticleBackground';
 import { SearchAndFilters } from '@/components/SearchAndFilters';
 import { StudentCard } from '@/components/StudentCard';
 import { StudentModal } from '@/components/StudentModal';
-import { AnalyticsDashboard } from '@/components/AnalyticsDashboard';
+
 import { ExportShareActions } from '@/components/ExportShareActions';
 import { FloatingShapes, GridPattern } from '@/components/ModernGraphics';
 import { ScrollReveal, ModernCard } from '@/components/InteractiveElements';
@@ -201,8 +201,6 @@ const Index = () => {
           <ExportShareActions filteredStudents={filteredStudents} />
         </div>
 
-        {/* Analytics Dashboard */}
-        <AnalyticsDashboard students={students} filteredStudents={filteredStudents} />
 
         {/* Student Gallery */}
         <ScrollReveal>
