@@ -12,10 +12,20 @@ export const ExportShareActions = ({ filteredStudents }: ExportShareActionsProps
   const [isExporting, setIsExporting] = useState(false);
   const [copied, setCopied] = useState(false);
 
+  const MAX_EXPORT = 10000;
+
   const exportCSV = async () => {
+    if (filteredStudents.length > MAX_EXPORT) {
+      toast({ 
+        title: 'Too many students', 
+        description: `Please apply filters to narrow down to ${MAX_EXPORT.toLocaleString()} or fewer students before exporting.`,
+        variant: 'destructive'
+      });
+      return;
+    }
     setIsExporting(true);
     try {
-      await new Promise(r => setTimeout(r, 300)); // brief delay for UX
+      await new Promise(r => setTimeout(r, 300));
       const headers = ['Roll Number', 'Department', 'Campus', 'Year', 'Program Type', 'Image URL'];
       const rows = filteredStudents.map(s => [
         s.rollNumber,

@@ -64,6 +64,7 @@ const Index = () => {
   const handleFiltersChange = useCallback((newFilters: SearchFilters) => {
     setFilters(newFilters);
     setCurrentPage(1);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
   const filteredStudents = useMemo(() => {
@@ -115,29 +116,29 @@ const Index = () => {
   }, []);
 
   useEffect(() => {
-    const handleEscape = (e: KeyboardEvent) => {
+    const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') handleCloseModal();
       if (isModalOpen && selectedStudent) {
-        const idx = filteredStudents.findIndex(s => s.rollNumber === selectedStudent.rollNumber);
+        const idx = paginatedStudents.findIndex(s => s.rollNumber === selectedStudent.rollNumber);
         if (e.key === 'ArrowLeft' && idx > 0) {
-          handleNavigateStudent(filteredStudents[idx - 1]);
+          handleNavigateStudent(paginatedStudents[idx - 1]);
         }
-        if (e.key === 'ArrowRight' && idx < filteredStudents.length - 1) {
-          handleNavigateStudent(filteredStudents[idx + 1]);
+        if (e.key === 'ArrowRight' && idx < paginatedStudents.length - 1) {
+          handleNavigateStudent(paginatedStudents[idx + 1]);
         }
       }
     };
     if (isModalOpen) {
-      document.addEventListener('keydown', handleEscape);
+      document.addEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
     }
     return () => {
-      document.removeEventListener('keydown', handleEscape);
+      document.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = 'unset';
     };
-  }, [isModalOpen, handleCloseModal, selectedStudent, filteredStudents, handleNavigateStudent]);
+  }, [isModalOpen, handleCloseModal, selectedStudent, paginatedStudents, handleNavigateStudent]);
 
   return (
     <div className="min-h-screen relative flex flex-col">
@@ -217,7 +218,7 @@ const Index = () => {
               <PaginationContent>
                 <PaginationItem>
                   <PaginationPrevious 
-                    onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                    onClick={() => { setCurrentPage(prev => Math.max(1, prev - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                     className={currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
                   />
                 </PaginationItem>
@@ -228,7 +229,7 @@ const Index = () => {
                   return (
                     <PaginationItem key={pageNumber}>
                       <PaginationLink
-                        onClick={() => setCurrentPage(pageNumber)}
+                        onClick={() => { setCurrentPage(pageNumber); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                         isActive={currentPage === pageNumber}
                         className="cursor-pointer"
                       >
@@ -240,7 +241,7 @@ const Index = () => {
                 
                 <PaginationItem>
                   <PaginationNext 
-                    onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                    onClick={() => { setCurrentPage(prev => Math.min(totalPages, prev + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                     className={currentPage === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
                   />
                 </PaginationItem>
