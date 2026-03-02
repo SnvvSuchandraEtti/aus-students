@@ -1,6 +1,5 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
-import { Suspense } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { GraduationCap } from 'lucide-react';
 import AdityaLogo from '/lovable-uploads/61cec41c-2099-4569-a713-5fe165947d1f.png';
@@ -10,7 +9,6 @@ import { ParticleBackground } from '@/components/ParticleBackground';
 import { SearchAndFilters } from '@/components/SearchAndFilters';
 import { StudentCard } from '@/components/StudentCard';
 import { StudentModal } from '@/components/StudentModal';
-
 import { ExportShareActions } from '@/components/ExportShareActions';
 import { FloatingShapes, GridPattern } from '@/components/ModernGraphics';
 import { ScrollReveal, ModernCard } from '@/components/InteractiveElements';
@@ -119,7 +117,6 @@ const Index = () => {
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') handleCloseModal();
-      // Arrow key navigation in modal
       if (isModalOpen && selectedStudent) {
         const idx = filteredStudents.findIndex(s => s.rollNumber === selectedStudent.rollNumber);
         if (e.key === 'ArrowLeft' && idx > 0) {
@@ -143,15 +140,13 @@ const Index = () => {
   }, [isModalOpen, handleCloseModal, selectedStudent, filteredStudents, handleNavigateStudent]);
 
   return (
-    <div className="min-h-screen relative">
+    <div className="min-h-screen relative flex flex-col">
       <FloatingShapes />
       <GridPattern />
       
       {/* Hero Section */}
-      <div className="relative overflow-hidden">
-        <Suspense fallback={<div className="h-48 sm:h-96" />}>
-          <ParticleBackground />
-        </Suspense>
+      <header className="relative overflow-hidden">
+        <ParticleBackground />
         
         <div className="relative z-10 container mx-auto px-4 py-6 sm:py-16">
           <motion.div
@@ -173,15 +168,15 @@ const Index = () => {
               />
             </motion.div>
             
-            <h1 className="text-3xl sm:text-6xl lg:text-8xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-blue-600 via-orange-500 to-blue-800 bg-clip-text text-transparent tracking-tight">
+            <h1 className="text-3xl sm:text-6xl lg:text-8xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent tracking-tight">
               Aditya Student Gallery
             </h1>
           </motion.div>
         </div>
-      </div>
+      </header>
 
       {/* Main Content */}
-      <div className="container mx-auto px-4 pb-16">
+      <main className="container mx-auto px-4 pb-16 flex-1">
         <section id="search-section" className="mb-6 sm:mb-8">
           <ScrollReveal>
             <SearchAndFilters
@@ -201,7 +196,6 @@ const Index = () => {
           <ExportShareActions filteredStudents={filteredStudents} />
         </div>
 
-
         {/* Student Gallery */}
         <ScrollReveal>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 md:gap-4">
@@ -218,7 +212,7 @@ const Index = () => {
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <div className="mt-8 sm:mt-12 flex justify-center">
+          <nav aria-label="Pagination" className="mt-8 sm:mt-12 flex justify-center">
             <Pagination>
               <PaginationContent>
                 <PaginationItem>
@@ -252,7 +246,7 @@ const Index = () => {
                 </PaginationItem>
               </PaginationContent>
             </Pagination>
-          </div>
+          </nav>
         )}
 
         {/* No Results */}
@@ -284,7 +278,16 @@ const Index = () => {
             </ModernCard>
           </motion.div>
         )}
-      </div>
+      </main>
+
+      {/* Footer */}
+      <footer className="border-t border-border/40 py-6 mt-auto">
+        <div className="container mx-auto px-4 text-center">
+          <p className="text-xs text-muted-foreground">
+            © {new Date().getFullYear()} Aditya University Student Gallery. All rights reserved.
+          </p>
+        </div>
+      </footer>
 
       <StudentModal
         student={selectedStudent}
