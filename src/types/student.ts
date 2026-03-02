@@ -72,7 +72,7 @@ export const CAMPUSES: Campus[] = [
     id: 'acet-diploma',
     name: 'ACET Poly',
     fullName: 'Aditya College of Engineering & Technology - Polytechnic',
-    baseUrl: 'https://info.aec.edu.in/aecpoly/StudentPhotos/',
+    baseUrl: 'https://info.aec.edu.in/acetpoly/StudentPhotos/',
     prefix: '404',
     type: 'diploma'
   },
@@ -80,8 +80,8 @@ export const CAMPUSES: Campus[] = [
     id: 'acem-diploma',
     name: 'ACEM Poly',
     fullName: 'Aditya College of Engineering - Polytechnic',
-    baseUrl: 'https://info.aec.edu.in/aecpoly/StudentPhotos/',
-    prefix: '255',
+    baseUrl: 'https://info.aec.edu.in/acoepoly/StudentPhotos/',
+    prefix: '455',
     type: 'diploma'
   },
   // BBA
@@ -301,6 +301,8 @@ export const generateStudentData = (): Student[] => {
       });
     } else if (campus.type === 'bba') {
       const bbaData = [
+        { year: '2019', prefix: '1119', range: 500 },
+        { year: '2020', prefix: '1120', range: 500 },
         { year: '2021', prefix: '1121', range: 500 },
         { year: '2022', prefix: '1122', range: 500 },
         { year: '2023', prefix: '1123', range: 500 }
@@ -309,7 +311,7 @@ export const generateStudentData = (): Student[] => {
       const bbaDept = relevantDepartments[0];
       bbaData.forEach(({ year, prefix, range }) => {
         for (let i = 1; i <= range; i++) {
-          const num = i.toString().padStart(2, '0');
+          const num = i.toString().padStart(3, '0');
           const rollNumber = `${prefix}${num}`;
           students.push({
             rollNumber,
