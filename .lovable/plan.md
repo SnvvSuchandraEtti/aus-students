@@ -1,43 +1,23 @@
 
-# Add Regular/LE Student Toggle for B-Tech
 
-## What This Does
-When B-Tech is selected as the program, a toggle switch will appear that lets you switch between viewing **Regular students only** (default) and **Lateral Entry (LE) students only**. This separates the two lists cleanly.
+## Bug: Filters Not Updating Until Page Refresh
 
-## How It Works
-- LE students are identified by their roll number pattern: they contain "5A" in the department code portion (e.g., `22A95A0501` vs regular `22a91a0501`)
-- A styled toggle button appears in the filter bar only when B-Tech program is selected
-- Default view shows Regular students; toggling switches to LE-only view
-- The toggle state syncs to the URL (so links are shareable) and resets when switching away from B-Tech
+### Root Cause
 
-## Changes
+The `FilterRadixSelect` component passes `value={value || undefined}` to the Radix Select. When a filter is cleared (set to `''`), this becomes `undefined`, which switches the Radix Select from **controlled** to **uncontrolled** mode. In uncontrolled mode, the Select ignores further `value` prop changes -- so when you pick a new campus/department/year, the component may not respond correctly until a full page refresh resets everything.
 
-### 1. Add `isLateralEntry` field to SearchFilters (`src/types/student.ts`)
-- Add `isLateralEntry: boolean` to the `SearchFilters` interface
-- This tracks whether the LE toggle is active
+### Fix
 
-### 2. Add LE toggle UI to filters (`src/components/SearchAndFilters.tsx`)
-- Add a toggle switch (using existing Radix Switch component) that appears only when `selectedCollegeType === 'engineering'`
-- Label: "Regular" / "Lateral Entry" with a visual indicator
-- Styled consistently with the existing glassmorphism filter bar
-- Include it as a filter chip when active
-- Reset `isLateralEntry` to `false` when program changes away from engineering
+In `src/components/SearchAndFilters.tsx`, change the Select's `value` prop from `value={value || undefined}` to `value={value || '__all__'}`. This keeps the component permanently in **controlled** mode. When a filter is empty (`''`), it correctly shows the `__all__` option (which displays the placeholder text). When a new option is selected, it updates immediately.
 
-### 3. Apply LE filtering logic (`src/pages/Index.tsx`)
-- In the `filteredStudents` memo, when B-Tech is selected, filter based on roll number pattern:
-  - Regular: roll number does NOT contain "5A" 
-  - LE: roll number DOES contain "5A"
-- Add `le` param to URL sync for shareability
-- Initialize from URL params on load
-- Reset page to 1 when toggle changes
+**Single line change** at line 373:
+```tsx
+// Before:
+<Select value={value || undefined} onValueChange={(v) => onChange(v === '__all__' ? '' : v)}>
 
-## Technical Details
+// After:
+<Select value={value || '__all__'} onValueChange={(v) => onChange(v === '__all__' ? '' : v)}>
+```
 
-### Files to modify:
-- **`src/types/student.ts`** -- Add `isLateralEntry` to `SearchFilters`
-- **`src/components/SearchAndFilters.tsx`** -- Add toggle switch UI, reset logic, filter chip
-- **`src/pages/Index.tsx`** -- Add LE filtering in `filteredStudents`, URL sync for `le` param, initialize from URL
+This ensures all Select dropdowns always stay controlled and respond instantly to filter changes without needing a page refresh.
 
-### LE Detection Pattern:
-Regular B-Tech roll numbers: `22a91a0501` (pattern: `{year}{prefix}{deptCode}{num}`)
-LE roll numbers: `22A95A0501` (pattern: `{year}{campusLE}5A{deptCode}{num}`) -- the "5A" in positions after the campus prefix is the key differentiator.
