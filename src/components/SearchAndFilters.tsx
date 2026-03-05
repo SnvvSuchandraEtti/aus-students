@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, X, SlidersHorizontal, GraduationCap, Building2, BookOpen, Calendar, Sparkles, Users } from 'lucide-react';
+import { Search, X, SlidersHorizontal, GraduationCap, Building2, BookOpen, Calendar, Users } from 'lucide-react';
 import { SearchFilters, CAMPUSES, DEPARTMENTS, COLLEGE_TYPES, getDepartmentsByType } from '@/types/student';
 import { Badge } from '@/components/ui/badge';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -9,8 +9,6 @@ import { useMemo } from 'react';
 interface SearchAndFiltersProps {
   filters: SearchFilters;
   onFiltersChange: (filters: SearchFilters) => void;
-  totalStudents: number;
-  filteredCount: number;
 }
 
 const getYearOptions = (collegeType: string) => {
@@ -92,8 +90,6 @@ const getYearOptions = (collegeType: string) => {
 export const SearchAndFilters = ({ 
   filters, 
   onFiltersChange, 
-  totalStudents, 
-  filteredCount 
 }: SearchAndFiltersProps) => {
   const updateFilter = (key: keyof SearchFilters, value: string | boolean) => {
     const newFilters = { ...filters, [key]: value };
@@ -347,25 +343,7 @@ export const SearchAndFilters = ({
           )}
         </AnimatePresence>
 
-        {/* Results indicator */}
-        <AnimatePresence>
-          {hasActiveFilters && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: 'auto' }}
-              exit={{ opacity: 0, height: 0 }}
-              className="mt-3 pt-3 border-t border-border/40"
-            >
-              <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                <Sparkles className="w-3.5 h-3.5 text-primary" />
-                <span>
-                  Showing <span className="font-semibold text-foreground">{filteredCount.toLocaleString()}</span> of{' '}
-                  <span className="text-foreground">{totalStudents.toLocaleString()}</span> students
-                </span>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+        {/* Results indicator removed */}
       </div>
     </motion.div>
   );

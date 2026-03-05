@@ -9,7 +9,7 @@ import { ParticleBackground } from '@/components/ParticleBackground';
 import { SearchAndFilters } from '@/components/SearchAndFilters';
 import { StudentCard } from '@/components/StudentCard';
 import { StudentModal } from '@/components/StudentModal';
-import { ExportShareActions } from '@/components/ExportShareActions';
+
 import { FloatingShapes, GridPattern } from '@/components/ModernGraphics';
 import { ScrollReveal, ModernCard } from '@/components/InteractiveElements';
 
@@ -183,19 +183,10 @@ const Index = () => {
             <SearchAndFilters
               filters={filters}
               onFiltersChange={handleFiltersChange}
-              totalStudents={students.length}
-              filteredCount={filteredStudents.length}
             />
           </ScrollReveal>
         </section>
 
-        {/* Export/Share Row */}
-        <div className="flex items-center justify-between mb-4">
-          <p className="text-xs text-muted-foreground">
-            {filteredStudents.length.toLocaleString()} students
-          </p>
-          <ExportShareActions filteredStudents={filteredStudents} />
-        </div>
 
         {/* Student Gallery */}
         <ScrollReveal>
