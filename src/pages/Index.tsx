@@ -86,7 +86,8 @@ const Index = () => {
       const matchesCollegeType = !filters.selectedCollegeType || 
         student.campus.type === filters.selectedCollegeType;
       
-      const isLE = student.rollNumber.toUpperCase().includes('5A');
+      const upper = student.rollNumber.toUpperCase();
+      const isLE = /\d{2}(A9|P3|MH)5A/.test(upper);
       const matchesLE = filters.selectedCollegeType !== 'engineering' || 
         (filters.isLateralEntry ? isLE : !isLE);
       
