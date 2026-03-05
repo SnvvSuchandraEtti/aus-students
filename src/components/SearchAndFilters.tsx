@@ -370,7 +370,7 @@ const FilterRadixSelect = ({
       {icon}
       {label}
     </label>
-    <Select value={value || undefined} onValueChange={(v) => onChange(v === '__all__' ? '' : v)}>
+    <Select value={value || '__all__'} onValueChange={(v) => onChange(v === '__all__' ? '' : v)}>
       <SelectTrigger className="w-full bg-muted/40 border-border/60 rounded-lg text-sm h-10">
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
