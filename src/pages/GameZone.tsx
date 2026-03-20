@@ -7,7 +7,7 @@ import {
   Select, SelectContent, SelectItem, SelectTrigger, SelectValue,
 } from '@/components/ui/select';
 import {
-  Student, CAMPUSES, COLLEGE_TYPES, getDepartmentsByType,
+  Student, COLLEGE_TYPES, getDepartmentsByType,
   generateStudentData,
 } from '@/types/student';
 
