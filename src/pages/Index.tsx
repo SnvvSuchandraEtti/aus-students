@@ -173,6 +173,14 @@ const Index = () => {
             <h1 className="text-3xl sm:text-6xl lg:text-8xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent tracking-tight">
               Aditya Student Gallery
             </h1>
+            
+            <Link
+              to="/game-zone"
+              className="inline-flex items-center gap-2 mt-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold text-sm shadow-lg shadow-purple-900/30 active:scale-95 transition-transform"
+            >
+              <Gamepad2 className="w-4 h-4" />
+              Game Zone 🎮
+            </Link>
           </motion.div>
         </div>
       </header>
