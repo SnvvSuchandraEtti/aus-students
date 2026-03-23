@@ -1,3 +1,3 @@
 TRY TO VISIT THIS 👇
 
-aus-students.lovable.app
+ [College Image Explorer Application for Students](https://aus-students.lovable.app)
