@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { Student } from '@/types/student';
-import { User, MapPin, GraduationCap } from 'lucide-react';
+import { User } from 'lucide-react';
 
 interface StudentCardProps {
   student: Student;
@@ -14,7 +14,6 @@ export const StudentCard = ({ student, onClick, index }: StudentCardProps) => {
   const [isVisible, setIsVisible] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  // IntersectionObserver for lazy rendering
   useEffect(() => {
     const el = cardRef.current;
     if (!el) return;
@@ -29,18 +28,23 @@ export const StudentCard = ({ student, onClick, index }: StudentCardProps) => {
   return (
     <div
       ref={cardRef}
-      className="group cursor-pointer animate-fade-in"
-      style={{ animationDelay: `${Math.min(index * 15, 300)}ms`, animationFillMode: 'both' }}
+      className="group cursor-pointer"
+      style={{ 
+        animationDelay: `${Math.min(index * 10, 200)}ms`, 
+        animationFillMode: 'both',
+        animation: 'fadeIn 0.3s ease-out forwards',
+        opacity: 0,
+      }}
       onClick={() => onClick(student)}
     >
-      <div className="glass-card rounded-2xl p-3 sm:p-4 h-full transition-all duration-300 group-hover:shadow-2xl group-hover:shadow-primary/20 group-hover:-translate-y-1 will-change-transform">
-        {/* Image Container */}
-        <div className="relative aspect-[3/4] mb-3 overflow-hidden rounded-xl bg-muted/30">
+      <div className="rounded-xl overflow-hidden bg-card border border-border/50 h-full transition-all duration-200 group-hover:shadow-lg group-hover:shadow-primary/8 group-hover:-translate-y-0.5 group-hover:border-primary/20">
+        {/* Image */}
+        <div className="relative aspect-[3/4] bg-muted/30 overflow-hidden">
           {isVisible && !imageError ? (
             <img
               src={student.imageUrl}
               alt={student.rollNumber}
-              className={`w-full h-full object-cover transition-all duration-500 group-hover:scale-105 ${
+              className={`w-full h-full object-cover transition-all duration-300 group-hover:scale-[1.03] ${
                 imageLoaded ? 'opacity-100' : 'opacity-0'
               }`}
               onLoad={() => { setImageLoaded(true); setImageError(false); }}
@@ -49,56 +53,41 @@ export const StudentCard = ({ student, onClick, index }: StudentCardProps) => {
             />
           ) : null}
           
-          {/* Error fallback */}
           {imageError && (
-            <div className="w-full h-full bg-gradient-to-br from-primary/5 to-primary/10 flex flex-col items-center justify-center gap-2">
-              <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                <User className="w-6 h-6 text-primary/40" />
+            <div className="w-full h-full bg-muted/20 flex flex-col items-center justify-center gap-1.5">
+              <div className="w-10 h-10 rounded-full bg-muted/40 flex items-center justify-center">
+                <User className="w-5 h-5 text-muted-foreground/50" />
               </div>
-              <span className="text-[10px] text-muted-foreground font-medium">{student.rollNumber}</span>
+              <span className="text-[9px] text-muted-foreground/60 font-mono">{student.rollNumber}</span>
             </div>
           )}
           
-          {/* Skeleton loading */}
           {isVisible && !imageLoaded && !imageError && (
-            <div className="absolute inset-0 bg-muted/40 animate-pulse rounded-xl" />
+            <div className="absolute inset-0 bg-muted/30 animate-pulse" />
           )}
 
-          {/* Placeholder before visible */}
           {!isVisible && (
-            <div className="w-full h-full bg-muted/20 rounded-xl" />
+            <div className="w-full h-full bg-muted/10" />
           )}
+
+          {/* Year badge */}
+          <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-md bg-background/80 backdrop-blur-sm text-[9px] font-medium text-foreground/80 border border-border/30">
+            {student.year}
+          </div>
         </div>
         
-        {/* Card Content */}
-        <div className="space-y-1.5">
-          <div className="flex items-center justify-between">
-            <h3 className="font-bold text-xs sm:text-sm text-foreground group-hover:text-primary transition-colors truncate">
+        {/* Info */}
+        <div className="p-2.5 sm:p-3 space-y-1">
+          <div className="flex items-center justify-between gap-1">
+            <h3 className="font-semibold text-[11px] sm:text-xs text-foreground group-hover:text-primary transition-colors truncate font-mono tracking-tight">
               {student.rollNumber}
             </h3>
-            <span className="text-base sm:text-lg flex-shrink-0">{student.department.icon}</span>
+            <span className="text-sm flex-shrink-0 leading-none">{student.department.icon}</span>
           </div>
           
-          <div className="space-y-0.5">
-            <div className="flex items-center text-[10px] sm:text-xs text-muted-foreground">
-              <GraduationCap className="w-3 h-3 mr-1 flex-shrink-0" />
-              <span className="truncate">{student.department.name}</span>
-            </div>
-            
-            <div className="flex items-center text-[10px] sm:text-xs text-muted-foreground">
-              <MapPin className="w-3 h-3 mr-1 flex-shrink-0" />
-              <span className="truncate">{student.campus.name}</span>
-            </div>
-          </div>
-          
-          <div className="flex justify-between items-center pt-1">
-            <span className="text-[10px] sm:text-xs font-medium px-2 py-0.5 bg-primary/10 text-primary rounded-full">
-              {student.year}
-            </span>
-            <span className="text-[10px] text-muted-foreground truncate ml-1">
-              {student.campus.fullName.split('(')[1]?.replace(')', '') || 'Campus'}
-            </span>
-          </div>
+          <p className="text-[9px] sm:text-[10px] text-muted-foreground truncate">
+            {student.department.name} · {student.campus.name}
+          </p>
         </div>
       </div>
     </div>

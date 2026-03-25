@@ -11,7 +11,7 @@ export const ParticleBackground = () => {
 
     let animationId: number;
     const particles: { x: number; y: number; vx: number; vy: number; size: number; opacity: number }[] = [];
-    const count = 80;
+    const count = 50;
 
     const resize = () => {
       canvas.width = canvas.offsetWidth * window.devicePixelRatio;
@@ -28,10 +28,10 @@ export const ParticleBackground = () => {
       particles.push({
         x: Math.random() * w(),
         y: Math.random() * h(),
-        vx: (Math.random() - 0.5) * 0.3,
-        vy: (Math.random() - 0.5) * 0.3,
-        size: Math.random() * 2 + 0.5,
-        opacity: Math.random() * 0.5 + 0.1,
+        vx: (Math.random() - 0.5) * 0.2,
+        vy: (Math.random() - 0.5) * 0.2,
+        size: Math.random() * 1.5 + 0.5,
+        opacity: Math.random() * 0.3 + 0.05,
       });
     }
 
@@ -39,7 +39,7 @@ export const ParticleBackground = () => {
 
     const draw = () => {
       ctx.clearRect(0, 0, w(), h());
-      const color = isDark() ? '74, 222, 128' : '59, 130, 246'; // green-400 / blue-500
+      const color = isDark() ? '74, 222, 128' : '59, 130, 246';
 
       particles.forEach(p => {
         p.x += p.vx;
@@ -53,17 +53,16 @@ export const ParticleBackground = () => {
         ctx.fill();
       });
 
-      // Draw connecting lines between nearby particles
       for (let i = 0; i < particles.length; i++) {
         for (let j = i + 1; j < particles.length; j++) {
           const dx = particles[i].x - particles[j].x;
           const dy = particles[i].y - particles[j].y;
           const dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 120) {
+          if (dist < 100) {
             ctx.beginPath();
             ctx.moveTo(particles[i].x, particles[i].y);
             ctx.lineTo(particles[j].x, particles[j].y);
-            ctx.strokeStyle = `rgba(${color}, ${0.08 * (1 - dist / 120)})`;
+            ctx.strokeStyle = `rgba(${color}, ${0.04 * (1 - dist / 100)})`;
             ctx.lineWidth = 0.5;
             ctx.stroke();
           }
