@@ -9,8 +9,7 @@ import { ParticleBackground } from '@/components/ParticleBackground';
 import { SearchAndFilters } from '@/components/SearchAndFilters';
 import { StudentCard } from '@/components/StudentCard';
 import { StudentModal } from '@/components/StudentModal';
-
-import { FloatingShapes, GridPattern } from '@/components/ModernGraphics';
+import { ScrollToTop } from '@/components/ScrollToTop';
 import { ScrollReveal, ModernCard } from '@/components/InteractiveElements';
 
 import { Student, SearchFilters, generateStudentData } from '@/types/student';
@@ -19,9 +18,8 @@ const ITEMS_PER_PAGE = 150;
 
 const Index = () => {
   const [searchParams, setSearchParams] = useSearchParams();
-  
   const students = useMemo(() => generateStudentData(), []);
-  
+
   const shuffledStudents = useMemo(() => {
     const shuffled = [...students];
     for (let i = shuffled.length - 1; i > 0; i--) {
@@ -30,10 +28,10 @@ const Index = () => {
     }
     return shuffled;
   }, [students]);
-  
+
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+
   const [filters, setFilters] = useState<SearchFilters>(() => ({
     searchTerm: searchParams.get('search') || '',
     selectedCampus: searchParams.get('campus') || '',
@@ -42,13 +40,12 @@ const Index = () => {
     selectedCollegeType: searchParams.get('program') || '',
     isLateralEntry: searchParams.get('le') === '1'
   }));
-  
+
   const [currentPage, setCurrentPage] = useState(() => {
     const page = searchParams.get('page');
     return page ? parseInt(page, 10) : 1;
   });
 
-  // Sync filters to URL
   useEffect(() => {
     const params = new URLSearchParams();
     if (filters.searchTerm) params.set('search', filters.searchTerm);
@@ -68,29 +65,29 @@ const Index = () => {
   }, []);
 
   const filteredStudents = useMemo(() => {
-    const noFiltersApplied = !filters.searchTerm && !filters.selectedCampus && 
-                           !filters.selectedDepartment && !filters.selectedYear && 
-                           !filters.selectedCollegeType;
+    const noFiltersApplied = !filters.searchTerm && !filters.selectedCampus &&
+      !filters.selectedDepartment && !filters.selectedYear &&
+      !filters.selectedCollegeType;
 
     if (noFiltersApplied) return shuffledStudents;
 
     return students.filter(student => {
-      const matchesSearch = !filters.searchTerm || 
+      const matchesSearch = !filters.searchTerm ||
         student.rollNumber.toLowerCase().includes(filters.searchTerm.toLowerCase());
-      const matchesCampus = !filters.selectedCampus || 
+      const matchesCampus = !filters.selectedCampus ||
         student.campus.id === filters.selectedCampus;
-      const matchesDepartment = !filters.selectedDepartment || 
+      const matchesDepartment = !filters.selectedDepartment ||
         student.department.id === filters.selectedDepartment;
-      const matchesYear = !filters.selectedYear || 
+      const matchesYear = !filters.selectedYear ||
         student.year === filters.selectedYear;
-      const matchesCollegeType = !filters.selectedCollegeType || 
+      const matchesCollegeType = !filters.selectedCollegeType ||
         student.campus.type === filters.selectedCollegeType;
-      
+
       const upper = student.rollNumber.toUpperCase();
       const isLE = /\d{2}(A9|P3|MH)5A/.test(upper);
-      const matchesLE = filters.selectedCollegeType !== 'engineering' || 
+      const matchesLE = filters.selectedCollegeType !== 'engineering' ||
         (filters.isLateralEntry ? isLE : !isLE);
-      
+
       return matchesSearch && matchesCampus && matchesDepartment && matchesYear && matchesCollegeType && matchesLE;
     });
   }, [students, shuffledStudents, filters]);
@@ -121,12 +118,8 @@ const Index = () => {
       if (e.key === 'Escape') handleCloseModal();
       if (isModalOpen && selectedStudent) {
         const idx = paginatedStudents.findIndex(s => s.rollNumber === selectedStudent.rollNumber);
-        if (e.key === 'ArrowLeft' && idx > 0) {
-          handleNavigateStudent(paginatedStudents[idx - 1]);
-        }
-        if (e.key === 'ArrowRight' && idx < paginatedStudents.length - 1) {
-          handleNavigateStudent(paginatedStudents[idx + 1]);
-        }
+        if (e.key === 'ArrowLeft' && idx > 0) handleNavigateStudent(paginatedStudents[idx - 1]);
+        if (e.key === 'ArrowRight' && idx < paginatedStudents.length - 1) handleNavigateStudent(paginatedStudents[idx + 1]);
       }
     };
     if (isModalOpen) {
@@ -143,78 +136,59 @@ const Index = () => {
 
   return (
     <div className="min-h-screen relative flex flex-col">
-      <FloatingShapes />
-      <GridPattern />
-      
-      {/* Hero Section */}
-      <header className="relative overflow-hidden">
+      {/* Hero */}
+      <header className="relative overflow-hidden bg-gradient-to-b from-primary/5 to-transparent">
         <ParticleBackground />
-        
-        <div className="relative z-10 container mx-auto px-4 py-6 sm:py-16">
+        <div className="relative z-10 container mx-auto px-4 py-8 sm:py-14">
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-8 sm:mb-12"
+            transition={{ duration: 0.5 }}
+            className="text-center"
           >
-            <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
+            <motion.img
+              src={AdityaLogo}
+              alt="Aditya University Logo"
+              className="w-24 h-12 sm:w-40 sm:h-20 mx-auto object-contain mb-4 sm:mb-6"
+              initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="mb-4 sm:mb-8"
-            >
-              <img 
-                src={AdityaLogo} 
-                alt="Aditya University Logo" 
-                className="w-28 h-14 sm:w-48 sm:h-24 lg:w-64 lg:h-32 mx-auto object-contain drop-shadow-2xl"
-              />
-            </motion.div>
-            
-            <h1 className="text-3xl sm:text-6xl lg:text-8xl font-bold mb-4 sm:mb-6 bg-gradient-to-r from-primary via-accent to-primary bg-clip-text text-transparent tracking-tight">
-              Aditya Student Gallery
+              transition={{ duration: 0.4, delay: 0.1 }}
+            />
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold mb-2 text-foreground tracking-tight">
+              Student <span className="text-gradient bg-gradient-to-r from-primary to-primary-glow">Gallery</span>
             </h1>
+            <p className="text-sm sm:text-base text-muted-foreground max-w-md mx-auto">
+              Browse and discover student profiles across all campuses
+            </p>
           </motion.div>
         </div>
       </header>
 
-      {/* Main Content */}
-      <main className="container mx-auto px-4 pb-16 flex-1">
-        <section id="search-section" className="mb-6 sm:mb-8">
-          <ScrollReveal>
-            <SearchAndFilters
-              filters={filters}
-              onFiltersChange={handleFiltersChange}
-            />
-          </ScrollReveal>
+      {/* Main */}
+      <main className="container mx-auto px-3 sm:px-4 pb-16 flex-1 -mt-2">
+        <section className="mb-4 sm:mb-6">
+          <SearchAndFilters filters={filters} onFiltersChange={handleFiltersChange} />
         </section>
 
-
-        {/* Student Gallery */}
         <ScrollReveal>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3 md:gap-4">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3">
             {paginatedStudents.map((student, index) => (
-              <StudentCard
-                key={student.rollNumber}
-                student={student}
-                onClick={handleStudentClick}
-                index={index}
-              />
+              <StudentCard key={student.rollNumber} student={student} onClick={handleStudentClick} index={index} />
             ))}
           </div>
         </ScrollReveal>
 
         {/* Pagination */}
         {totalPages > 1 && (
-          <nav aria-label="Pagination" className="mt-8 sm:mt-12 flex justify-center">
+          <nav aria-label="Pagination" className="mt-8 flex justify-center">
             <Pagination>
               <PaginationContent>
                 <PaginationItem>
-                  <PaginationPrevious 
+                  <PaginationPrevious
                     onClick={() => { setCurrentPage(prev => Math.max(1, prev - 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                     className={currentPage === 1 ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
                   />
                 </PaginationItem>
-                
                 {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
                   const pageNumber = Math.max(1, Math.min(totalPages - 4, currentPage - 2)) + i;
                   if (pageNumber > totalPages) return null;
@@ -230,9 +204,8 @@ const Index = () => {
                     </PaginationItem>
                   );
                 })}
-                
                 <PaginationItem>
-                  <PaginationNext 
+                  <PaginationNext
                     onClick={() => { setCurrentPage(prev => Math.min(totalPages, prev + 1)); window.scrollTo({ top: 0, behavior: 'smooth' }); }}
                     className={currentPage === totalPages ? 'pointer-events-none opacity-50' : 'cursor-pointer'}
                   />
@@ -244,29 +217,19 @@ const Index = () => {
 
         {/* No Results */}
         {filteredStudents.length === 0 && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="text-center py-16"
-          >
-            <ModernCard className="p-12 rounded-3xl max-w-md mx-auto">
-              <GraduationCap className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
-              <h3 className="text-2xl font-bold text-foreground mb-2">No Students Found</h3>
-              <p className="text-muted-foreground mb-6">
-                Try adjusting your search criteria or filters
-              </p>
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-16">
+            <ModernCard className="p-10 rounded-2xl max-w-sm mx-auto">
+              <GraduationCap className="w-12 h-12 text-muted-foreground/40 mx-auto mb-3" />
+              <h3 className="text-lg font-bold text-foreground mb-1">No Students Found</h3>
+              <p className="text-sm text-muted-foreground mb-4">Try adjusting your filters</p>
               <button
                 onClick={() => handleFiltersChange({
-                  searchTerm: '',
-                  selectedCampus: '',
-                  selectedDepartment: '',
-                  selectedYear: '',
-                  selectedCollegeType: '',
-                  isLateralEntry: false
+                  searchTerm: '', selectedCampus: '', selectedDepartment: '',
+                  selectedYear: '', selectedCollegeType: '', isLateralEntry: false
                 })}
-                className="px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-primary/90 transition-colors"
+                className="px-4 py-2 bg-primary text-primary-foreground rounded-lg text-sm font-medium hover:bg-primary/90 transition-colors"
               >
-                Clear All Filters
+                Clear Filters
               </button>
             </ModernCard>
           </motion.div>
@@ -274,13 +237,15 @@ const Index = () => {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-border/40 py-6 mt-auto">
+      <footer className="border-t border-border/30 py-5 mt-auto">
         <div className="container mx-auto px-4 text-center">
-          <p className="text-xs text-muted-foreground">
-            © {new Date().getFullYear()} Aditya University Student Gallery. All rights reserved.
+          <p className="text-[11px] text-muted-foreground">
+            © {new Date().getFullYear()} Aditya University Student Gallery
           </p>
         </div>
       </footer>
+
+      <ScrollToTop />
 
       <StudentModal
         student={selectedStudent}
