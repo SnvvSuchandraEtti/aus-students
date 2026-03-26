@@ -1,1 +1,2 @@
-[Designed and Hosted in Lovable](aus-students.lovable.app)
+Designed and Hosted in Lovable!
+[Click me](https://aus-students.lovable.app)
