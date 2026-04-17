@@ -27,10 +27,6 @@ const Index = () => {
   const { addRecent } = useRecentlyViewed();
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(() => searchParams.get('fav') === '1');
 
-const Index = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const students = useMemo(() => generateStudentData(), []);
-
   const shuffledStudents = useMemo(() => {
     const shuffled = [...students];
     for (let i = shuffled.length - 1; i > 0; i--) {
