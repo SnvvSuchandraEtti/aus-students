@@ -101,7 +101,11 @@ const Index = () => {
 
     if (noFiltersApplied) return shuffledStudents;
 
+    const favSet = new Set(favorites);
+
     return students.filter(student => {
+      if (showFavoritesOnly && !favSet.has(student.rollNumber)) return false;
+
       const matchesSearch = !filters.searchTerm ||
         student.rollNumber.toLowerCase().includes(filters.searchTerm.toLowerCase());
       const matchesCampus = !filters.selectedCampus ||
@@ -120,7 +124,7 @@ const Index = () => {
 
       return matchesSearch && matchesCampus && matchesDepartment && matchesYear && matchesCollegeType && matchesLE;
     });
-  }, [students, shuffledStudents, filters]);
+  }, [students, shuffledStudents, filters, showFavoritesOnly, favorites]);
 
   const paginatedStudents = useMemo(() => {
     const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
@@ -132,7 +136,8 @@ const Index = () => {
   const handleStudentClick = useCallback((student: Student) => {
     setSelectedStudent(student);
     setIsModalOpen(true);
-  }, []);
+    addRecent(student.rollNumber);
+  }, [addRecent]);
 
   const handleCloseModal = useCallback(() => {
     setIsModalOpen(false);
@@ -199,6 +204,36 @@ const Index = () => {
         <section className="mb-4 sm:mb-6">
           <SearchAndFilters filters={filters} onFiltersChange={handleFiltersChange} />
         </section>
+
+        {/* Stats + actions row */}
+        <StatsBar
+          total={students.length}
+          filtered={filteredStudents.length}
+          campuses={CAMPUSES.length}
+          departments={DEPARTMENTS.length}
+          favoritesCount={favorites.length}
+        />
+
+        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
+          <button
+            onClick={() => { setShowFavoritesOnly(v => !v); setCurrentPage(1); }}
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium border transition-colors ${
+              showFavoritesOnly
+                ? 'bg-yellow-400/15 text-yellow-600 dark:text-yellow-400 border-yellow-400/30'
+                : 'bg-card text-muted-foreground border-border/40 hover:bg-muted'
+            }`}
+            aria-pressed={showFavoritesOnly}
+          >
+            <Star className={`w-3.5 h-3.5 ${showFavoritesOnly ? 'fill-yellow-400 text-yellow-400' : ''}`} />
+            {showFavoritesOnly ? 'Showing Favorites' : 'Favorites Only'}
+            {favorites.length > 0 && (
+              <span className="ml-1 px-1.5 py-0.5 rounded-full bg-background/60 text-[9px] font-bold">
+                {favorites.length}
+              </span>
+            )}
+          </button>
+          <ExportShareActions filteredStudents={filteredStudents} />
+        </div>
 
         <ScrollReveal>
           <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3">
@@ -276,6 +311,7 @@ const Index = () => {
       </footer>
 
       <ScrollToTop />
+      <InstallPrompt />
 
       <StudentModal
         student={selectedStudent}
