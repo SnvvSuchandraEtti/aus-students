@@ -11,8 +11,7 @@ import { StudentCard } from '@/components/StudentCard';
 import { StudentModal } from '@/components/StudentModal';
 import { ScrollToTop } from '@/components/ScrollToTop';
 import { ScrollReveal, ModernCard } from '@/components/InteractiveElements';
-import { StatsBar } from '@/components/StatsBar';
-import { ExportShareActions } from '@/components/ExportShareActions';
+import { ShareAction } from '@/components/ShareAction';
 import { InstallPrompt } from '@/components/InstallPrompt';
 import { useFavorites, useRecentlyViewed } from '@/hooks/useFavorites';
 
@@ -201,14 +200,7 @@ const Index = () => {
           <SearchAndFilters filters={filters} onFiltersChange={handleFiltersChange} />
         </section>
 
-        {/* Stats + actions row */}
-        <StatsBar
-          total={students.length}
-          filtered={filteredStudents.length}
-          campuses={CAMPUSES.length}
-          departments={DEPARTMENTS.length}
-          favoritesCount={favorites.length}
-        />
+
 
         <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
           <button
@@ -228,7 +220,7 @@ const Index = () => {
               </span>
             )}
           </button>
-          <ExportShareActions filteredStudents={filteredStudents} />
+          <ShareAction />
         </div>
 
         <ScrollReveal>
