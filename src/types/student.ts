@@ -228,8 +228,8 @@ export const generateStudentData = (): Student[] => {
       // LE students join 1 year after batch start, so roll prefix = batchYear + 1
       // leYears = the BATCH year the LE student belongs to
       // leYearPrefixes = the roll-number prefix (batch year + 1)
-      const leYears = ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022'];
-      const leYearPrefixes = ['15', '16', '17', '18', '19', '20', '21', '22', '23'];
+      const leYears = ['2014', '2015', '2016', '2017', '2018', '2019', '2020', '2021', '2022', '2023'];
+      const leYearPrefixes = ['15', '16', '17', '18', '19', '20', '21', '22', '23', '24'];
       
       const leDepartments = [
         { ...DEPARTMENTS.find(d => d.id === 'ce')!, code: '5A01' },
