@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
-import { GraduationCap } from 'lucide-react';
+import { GraduationCap, Star } from 'lucide-react';
 import AdityaLogo from '/lovable-uploads/61cec41c-2099-4569-a713-5fe165947d1f.png';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 
@@ -11,10 +11,21 @@ import { StudentCard } from '@/components/StudentCard';
 import { StudentModal } from '@/components/StudentModal';
 import { ScrollToTop } from '@/components/ScrollToTop';
 import { ScrollReveal, ModernCard } from '@/components/InteractiveElements';
+import { StatsBar } from '@/components/StatsBar';
+import { ExportShareActions } from '@/components/ExportShareActions';
+import { InstallPrompt } from '@/components/InstallPrompt';
+import { useFavorites, useRecentlyViewed } from '@/hooks/useFavorites';
 
-import { Student, SearchFilters, generateStudentData } from '@/types/student';
+import { Student, SearchFilters, generateStudentData, CAMPUSES, DEPARTMENTS } from '@/types/student';
 
 const ITEMS_PER_PAGE = 150;
+
+const Index = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const students = useMemo(() => generateStudentData(), []);
+  const { favorites } = useFavorites();
+  const { addRecent } = useRecentlyViewed();
+  const [showFavoritesOnly, setShowFavoritesOnly] = useState(() => searchParams.get('fav') === '1');
 
 const Index = () => {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -54,9 +65,28 @@ const Index = () => {
     if (filters.selectedYear) params.set('year', filters.selectedYear);
     if (filters.selectedCollegeType) params.set('program', filters.selectedCollegeType);
     if (filters.isLateralEntry) params.set('le', '1');
+    if (showFavoritesOnly) params.set('fav', '1');
     if (currentPage > 1) params.set('page', currentPage.toString());
     setSearchParams(params, { replace: true });
-  }, [filters, currentPage, setSearchParams]);
+  }, [filters, currentPage, setSearchParams, showFavoritesOnly]);
+
+  // Dynamic page title for SEO
+  useEffect(() => {
+    const parts: string[] = [];
+    if (filters.selectedCollegeType) parts.push(filters.selectedCollegeType.toUpperCase());
+    if (filters.selectedCampus) {
+      const c = CAMPUSES.find(x => x.id === filters.selectedCampus);
+      if (c) parts.push(c.name);
+    }
+    if (filters.selectedDepartment) {
+      const d = DEPARTMENTS.find(x => x.id === filters.selectedDepartment);
+      if (d) parts.push(d.name);
+    }
+    if (filters.selectedYear) parts.push(filters.selectedYear);
+    document.title = parts.length
+      ? `${parts.join(' · ')} — Aditya University Student Gallery`
+      : 'Aditya University Student Gallery — Browse Student Profiles';
+  }, [filters]);
 
   const handleFiltersChange = useCallback((newFilters: SearchFilters) => {
     setFilters(newFilters);
@@ -67,7 +97,7 @@ const Index = () => {
   const filteredStudents = useMemo(() => {
     const noFiltersApplied = !filters.searchTerm && !filters.selectedCampus &&
       !filters.selectedDepartment && !filters.selectedYear &&
-      !filters.selectedCollegeType;
+      !filters.selectedCollegeType && !showFavoritesOnly;
 
     if (noFiltersApplied) return shuffledStudents;
 
