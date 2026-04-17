@@ -1,37 +1,16 @@
 # Aditya University Student Directory
 
-Browse student profiles across all departments and campuses of Aditya University.
+A student profile browsing platform for Aditya University,
+built using public student photo URLs from the college portal.
 
 ## Features
-
-- 🔍 Search students by roll number
-- 🏫 Filter by campus, department, year, and program type
-- ⭐ Favorite and bookmark students
-- 📤 Export and share filtered results
-- 📱 PWA — installable on mobile devices
-- ⚡ Fast, client-side filtering with pagination
+- Browse by Program, Campus, Department, Batch
+- Regular & Lateral Entry toggle for B.Tech
+- Game Zone for college events (Spinner, Pair Matcher, Truth or Dare)
+- Mobile responsive, dark mode
 
 ## Tech Stack
+React · TypeScript · Vite · Tailwind CSS · Radix UI
 
-- **React 18** + TypeScript
-- **Vite** — lightning-fast dev server & build
-- **Tailwind CSS** — utility-first styling
-- **Framer Motion** — smooth animations
-- **Radix UI / shadcn/ui** — accessible component primitives
-
-## Getting Started
-
-```bash
-# Install dependencies
-npm install
-
-# Start development server
-npm run dev
-
-# Build for production
-npm run build
-```
-
-## Author
-
-**Suchandra Etti**
+## Built by
+Suchandra Etti — CSE Final Year, Aditya University
