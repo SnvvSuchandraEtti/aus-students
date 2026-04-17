@@ -1,7 +1,7 @@
 {
-  "name": "Aditya University Student Gallery",
-  "short_name": "AUS Gallery",
-  "description": "Browse and search student profiles across all Aditya University campuses",
+  "name": "Aditya University Student Directory",
+  "short_name": "AUS Directory",
+  "description": "Browse student profiles across all departments and campuses of Aditya University",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

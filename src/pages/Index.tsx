@@ -301,7 +301,7 @@ const Index = () => {
       <footer className="border-t border-border/30 py-5 mt-auto">
         <div className="container mx-auto px-4 text-center">
           <p className="text-[11px] text-muted-foreground">
-            © {new Date().getFullYear()} Aditya University Student Gallery
+            Built by Suchandra Etti · Aditya University · 2025
           </p>
         </div>
       </footer>

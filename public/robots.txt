@@ -13,5 +13,5 @@ Allow: /
 User-agent: *
 Allow: /
 
-Sitemap: https://aus-students.lovable.app/sitemap.xml
+Sitemap: https://aus-students.vercel.app/sitemap.xml
 
