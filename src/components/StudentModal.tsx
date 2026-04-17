@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, User, MapPin, GraduationCap, Calendar, Building, Copy, Check, ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
+import { X, User, MapPin, GraduationCap, Calendar, Building, Copy, Check, ChevronLeft, ChevronRight, ExternalLink, Star } from 'lucide-react';
 import { Student } from '@/types/student';
 import { toast } from '@/hooks/use-toast';
+import { useFavorites } from '@/hooks/useFavorites';
 
 interface StudentModalProps {
   student: Student | null;
@@ -30,6 +31,7 @@ export const StudentModal = ({ student, isOpen, onClose, filteredStudents = [], 
   const [imageError, setImageError] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [rollCopied, setRollCopied] = useState(false);
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   if (!student) return null;
 
@@ -91,13 +93,23 @@ export const StudentModal = ({ student, isOpen, onClose, filteredStudents = [], 
             transition={{ type: "spring", stiffness: 400, damping: 30 }}
             className="bg-card border border-border/50 max-w-xl w-full max-h-[90vh] overflow-y-auto rounded-2xl shadow-2xl shadow-foreground/5 relative"
           >
-            {/* Close */}
-            <button
-              onClick={onClose}
-              className="absolute top-3 right-3 z-10 p-2 rounded-lg hover:bg-muted/60 transition-colors"
-            >
-              <X className="w-4 h-4 text-muted-foreground" />
-            </button>
+            {/* Top actions */}
+            <div className="absolute top-3 right-3 z-10 flex items-center gap-1">
+              <button
+                onClick={() => toggleFavorite(student.rollNumber)}
+                className="p-2 rounded-lg hover:bg-muted/60 transition-colors"
+                aria-label="Toggle favorite"
+              >
+                <Star className={`w-4 h-4 ${isFavorite(student.rollNumber) ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground'}`} />
+              </button>
+              <button
+                onClick={onClose}
+                className="p-2 rounded-lg hover:bg-muted/60 transition-colors"
+                aria-label="Close"
+              >
+                <X className="w-4 h-4 text-muted-foreground" />
+              </button>
+            </div>
 
             <div className="flex flex-col sm:flex-row">
               {/* Image */}

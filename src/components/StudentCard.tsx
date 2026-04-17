@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Student } from '@/types/student';
-import { User } from 'lucide-react';
+import { User, Star } from 'lucide-react';
+import { useFavorites } from '@/hooks/useFavorites';
 
 interface StudentCardProps {
   student: Student;
@@ -9,6 +10,8 @@ interface StudentCardProps {
 }
 
 export const StudentCard = ({ student, onClick, index }: StudentCardProps) => {
+  const { isFavorite, toggleFavorite } = useFavorites();
+  const fav = isFavorite(student.rollNumber);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -74,6 +77,15 @@ export const StudentCard = ({ student, onClick, index }: StudentCardProps) => {
           <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-md bg-background/80 backdrop-blur-sm text-[9px] font-medium text-foreground/80 border border-border/30">
             {student.year}
           </div>
+
+          {/* Favorite button */}
+          <button
+            onClick={(e) => { e.stopPropagation(); toggleFavorite(student.rollNumber); }}
+            aria-label={fav ? 'Remove from favorites' : 'Add to favorites'}
+            className="absolute top-1.5 left-1.5 p-1 rounded-md bg-background/80 backdrop-blur-sm border border-border/30 hover:bg-background transition-colors"
+          >
+            <Star className={`w-3 h-3 transition-colors ${fav ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground/60'}`} />
+          </button>
         </div>
         
         {/* Info */}

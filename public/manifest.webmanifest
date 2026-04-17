@@ -1,0 +1,25 @@
+{
+  "name": "Aditya University Student Gallery",
+  "short_name": "AUS Gallery",
+  "description": "Browse and search student profiles across all Aditya University campuses",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#1e40af",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/lovable-uploads/61cec41c-2099-4569-a713-5fe165947d1f.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/lovable-uploads/61cec41c-2099-4569-a713-5fe165947d1f.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["education", "productivity"]
+}
