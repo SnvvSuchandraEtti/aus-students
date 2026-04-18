@@ -6,7 +6,6 @@ built using public student photo URLs from the college portal.
 ## Features
 - Browse by Program, Campus, Department, Batch
 - Regular & Lateral Entry toggle for B.Tech
-- Game Zone for college events (Spinner, Pair Matcher, Truth or Dare)
 - Mobile responsive, dark mode
 
 ## Tech Stack
