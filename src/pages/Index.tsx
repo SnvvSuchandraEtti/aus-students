@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { useSearchParams } from 'react-router-dom';
 import { GraduationCap } from 'lucide-react';
-import AdityaLogo from '/lovable-uploads/61cec41c-2099-4569-a713-5fe165947d1f.png';
+import AdityaLogo from '/aditya-logo.png';
 import { Pagination, PaginationContent, PaginationItem, PaginationLink, PaginationNext, PaginationPrevious } from '@/components/ui/pagination';
 
 import { ParticleBackground } from '@/components/ParticleBackground';
@@ -13,6 +13,7 @@ import { ScrollToTop } from '@/components/ScrollToTop';
 import { ScrollReveal, ModernCard } from '@/components/InteractiveElements';
 import { ShareAction } from '@/components/ShareAction';
 import { InstallPrompt } from '@/components/InstallPrompt';
+import { FindMyClassmatesModal } from '@/components/FindMyClassmatesModal';
 import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
 
 import { Student, SearchFilters, generateStudentData, CAMPUSES, DEPARTMENTS } from '@/types/student';
@@ -34,6 +35,7 @@ const Index = () => {
 
   const [selectedStudent, setSelectedStudent] = useState<Student | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isFindMyClassmatesModalOpen, setIsFindMyClassmatesModalOpen] = useState(false);
 
   const [filters, setFilters] = useState<SearchFilters>(() => ({
     searchTerm: searchParams.get('search') || '',
@@ -179,9 +181,15 @@ const Index = () => {
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold mb-2 text-foreground tracking-tight">
               Student <span className="text-gradient bg-gradient-to-r from-primary to-primary-glow">Gallery</span>
             </h1>
-            <p className="text-sm sm:text-base text-muted-foreground max-w-md mx-auto">
+            <p className="text-sm sm:text-base text-muted-foreground max-w-md mx-auto mb-6">
               Browse and discover student profiles across all campuses
             </p>
+            <button
+              onClick={() => setIsFindMyClassmatesModalOpen(true)}
+              className="inline-flex items-center justify-center rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-6 py-2 shadow-md hover:shadow-lg transform hover:-translate-y-0.5 duration-200"
+            >
+              Find My Classmates 🎯
+            </button>
           </motion.div>
         </div>
       </header>
@@ -282,6 +290,21 @@ const Index = () => {
         onClose={handleCloseModal}
         filteredStudents={paginatedStudents}
         onNavigate={handleNavigateStudent}
+      />
+
+      <FindMyClassmatesModal 
+        isOpen={isFindMyClassmatesModalOpen}
+        onClose={() => setIsFindMyClassmatesModalOpen(false)}
+        onApply={({ program, department, year }) => {
+          handleFiltersChange({
+            searchTerm: '',
+            selectedCampus: '',
+            selectedDepartment: department,
+            selectedYear: year,
+            selectedCollegeType: program,
+            isLateralEntry: false
+          });
+        }}
       />
     </div>
   );

@@ -9,13 +9,13 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/lovable-uploads/61cec41c-2099-4569-a713-5fe165947d1f.png",
+      "src": "/aditya-logo.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
     },
     {
-      "src": "/lovable-uploads/61cec41c-2099-4569-a713-5fe165947d1f.png",
+      "src": "/aditya-logo.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
