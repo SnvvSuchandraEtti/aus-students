@@ -11,7 +11,7 @@ export const ParticleBackground = () => {
 
     let animationId: number;
     const particles: { x: number; y: number; vx: number; vy: number; size: number; opacity: number }[] = [];
-    const count = 50;
+    const count = 75;
 
     const resize = () => {
       canvas.width = canvas.offsetWidth * window.devicePixelRatio;
@@ -31,7 +31,7 @@ export const ParticleBackground = () => {
         vx: (Math.random() - 0.5) * 0.2,
         vy: (Math.random() - 0.5) * 0.2,
         size: Math.random() * 1.5 + 0.5,
-        opacity: Math.random() * 0.3 + 0.05,
+        opacity: Math.random() * 0.4 + 0.1,
       });
     }
 
@@ -39,7 +39,7 @@ export const ParticleBackground = () => {
 
     const draw = () => {
       ctx.clearRect(0, 0, w(), h());
-      const color = isDark() ? '74, 222, 128' : '59, 130, 246';
+      const color = isDark() ? '34, 211, 238' : '79, 70, 229';
 
       particles.forEach(p => {
         p.x += p.vx;

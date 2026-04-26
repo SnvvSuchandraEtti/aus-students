@@ -37,14 +37,14 @@ export const StudentCard = ({ student, onClick, index }: StudentCardProps) => {
       }}
       onClick={() => onClick(student)}
     >
-      <div className="rounded-xl overflow-hidden bg-card border border-border/50 h-full transition-all duration-200 group-hover:shadow-lg group-hover:shadow-primary/8 group-hover:-translate-y-0.5 group-hover:border-primary/20">
+      <div className="rounded-xl overflow-hidden bg-card border border-transparent transition-all duration-300 group-hover:-translate-y-1 group-hover:border-cyan-500/50 group-hover:shadow-[0_0_20px_rgba(34,211,238,0.3)]">
         {/* Image */}
         <div className="relative aspect-[3/4] bg-muted/30 overflow-hidden">
           {isVisible && !imageError ? (
             <img
               src={student.imageUrl}
               alt={student.rollNumber}
-              className={`w-full h-full object-cover transition-all duration-300 group-hover:scale-[1.03] ${
+              className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${
                 imageLoaded ? 'opacity-100' : 'opacity-0'
               }`}
               onLoad={() => { setImageLoaded(true); setImageError(false); }}
@@ -70,24 +70,26 @@ export const StudentCard = ({ student, onClick, index }: StudentCardProps) => {
             <div className="w-full h-full bg-muted/10" />
           )}
 
+          {/* Bottom gradient overlay */}
+          <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/80 to-transparent pointer-events-none" />
+
+          {/* Top-left pill for department/campus */}
+          <div className="absolute top-1.5 left-1.5 px-2 py-0.5 rounded-full bg-background/60 backdrop-blur-md border border-white/10 text-[9px] font-medium text-foreground flex items-center gap-1 shadow-sm">
+            <span>{student.department.icon}</span>
+            {student.department.name} · {student.campus.name}
+          </div>
+
           {/* Year badge */}
-          <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded-md bg-background/80 backdrop-blur-sm text-[9px] font-medium text-foreground/80 border border-border/30">
+          <div className="absolute top-1.5 right-1.5 px-2 py-0.5 rounded-full bg-primary/20 backdrop-blur-md border border-primary/30 text-[9px] font-bold text-primary dark:shadow-[0_0_10px_rgba(34,211,238,0.5)]">
             {student.year}
           </div>
-        </div>
-        
-        {/* Info */}
-        <div className="p-2.5 sm:p-3 space-y-1">
-          <div className="flex items-center justify-between gap-1">
-            <h3 className="font-semibold text-[11px] sm:text-xs text-foreground group-hover:text-primary transition-colors truncate font-mono tracking-tight">
+
+          {/* Roll number at the bottom */}
+          <div className="absolute bottom-1.5 left-2 right-2 text-white z-10">
+            <h3 className="font-bold text-[11px] sm:text-xs font-mono tracking-wider drop-shadow-md truncate">
               {student.rollNumber}
             </h3>
-            <span className="text-sm flex-shrink-0 leading-none">{student.department.icon}</span>
           </div>
-          
-          <p className="text-[9px] sm:text-[10px] text-muted-foreground truncate">
-            {student.department.name} · {student.campus.name}
-          </p>
         </div>
       </div>
     </div>

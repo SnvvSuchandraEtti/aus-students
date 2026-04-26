@@ -11,7 +11,6 @@ import { StudentCard } from '@/components/StudentCard';
 import { StudentModal } from '@/components/StudentModal';
 import { ScrollToTop } from '@/components/ScrollToTop';
 import { ScrollReveal, ModernCard } from '@/components/InteractiveElements';
-import { ShareAction } from '@/components/ShareAction';
 import { InstallPrompt } from '@/components/InstallPrompt';
 import { FindMyClassmatesModal } from '@/components/FindMyClassmatesModal';
 import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
@@ -173,15 +172,20 @@ const Index = () => {
             <motion.img
               src={AdityaLogo}
               alt="Aditya University Logo"
-              className="w-24 h-12 sm:w-40 sm:h-20 mx-auto object-contain mb-4 sm:mb-6"
+              className="w-28 h-14 sm:w-48 sm:h-24 mx-auto object-contain mb-4 sm:mb-6 dark:drop-shadow-[0_0_15px_rgba(34,211,238,0.3)] contrast-125 dark:contrast-100"
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.4, delay: 0.1 }}
             />
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-bold mb-2 text-foreground tracking-tight">
-              Student <span className="text-gradient bg-gradient-to-r from-primary to-primary-glow">Gallery</span>
+            <h1 className="relative text-3xl sm:text-5xl lg:text-6xl font-bold mb-3 tracking-tight z-10">
+              <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/30 via-transparent to-transparent blur-2xl" />
+              <span className="text-foreground">Student</span>{' '}
+              <span className="bg-gradient-to-r from-cyan-500 to-purple-500 dark:from-cyan-400 dark:to-purple-400 text-transparent bg-clip-text relative inline-block">
+                Gallery
+                <span className="absolute -bottom-1 left-0 w-full h-[2px] sm:h-[3px] bg-gradient-to-r from-cyan-500 to-purple-500 rounded-full shadow-[0_0_10px_rgba(34,211,238,0.8)] dark:shadow-[0_0_15px_rgba(34,211,238,0.8)]" />
+              </span>
             </h1>
-            <p className="text-sm sm:text-base text-muted-foreground max-w-md mx-auto mb-6">
+            <p className="text-base sm:text-lg text-muted-foreground opacity-60 max-w-md mx-auto mb-6 mt-4">
               Browse and discover student profiles across all campuses
             </p>
             <button
@@ -195,19 +199,13 @@ const Index = () => {
       </header>
 
       {/* Main */}
-      <main className="container mx-auto px-3 sm:px-4 pb-16 flex-1 -mt-2">
-        <section className="mb-4 sm:mb-6">
+      <main className="container max-w-[1400px] mx-auto px-3 sm:px-4 pb-16 flex-1 -mt-2">
+        <section className="mb-8 sm:mb-12">
           <SearchAndFilters filters={filters} onFiltersChange={handleFiltersChange} />
         </section>
 
-
-
-        <div className="flex flex-wrap items-center justify-between gap-2 mb-4">
-          <ShareAction />
-        </div>
-
         <ScrollReveal>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2 sm:gap-3">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 sm:gap-6">
             {paginatedStudents.map((student, index) => (
               <StudentCard key={student.rollNumber} student={student} onClick={handleStudentClick} index={index} />
             ))}
