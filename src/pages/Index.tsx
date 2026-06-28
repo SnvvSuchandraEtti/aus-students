@@ -12,6 +12,7 @@ import { StudentModal } from '@/components/StudentModal';
 import { ScrollToTop } from '@/components/ScrollToTop';
 import { ScrollReveal, ModernCard } from '@/components/InteractiveElements';
 import { InstallPrompt } from '@/components/InstallPrompt';
+import { VercelMirrorLink } from '@/components/VercelMirrorLink';
 import { FindMyClassmatesModal } from '@/components/FindMyClassmatesModal';
 import { useRecentlyViewed } from '@/hooks/useRecentlyViewed';
 
@@ -272,15 +273,24 @@ const Index = () => {
 
       {/* Footer */}
       <footer className="border-t border-border/30 py-5 mt-auto">
-        <div className="container mx-auto px-4 text-center">
+        <div className="container mx-auto px-4 text-center space-y-2">
           <p className="text-[11px] text-muted-foreground">
             Built by Suchandra Etti · Aditya University · 2025
           </p>
+          <a
+            href="https://adityans.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/50 bg-muted/30 text-[11px] text-muted-foreground hover:text-primary hover:border-primary/40 transition-colors"
+          >
+            Also available on Vercel →
+          </a>
         </div>
       </footer>
 
       <ScrollToTop />
       <InstallPrompt />
+      <VercelMirrorLink />
 
       <StudentModal
         student={selectedStudent}
