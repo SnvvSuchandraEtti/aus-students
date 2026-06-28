@@ -54,7 +54,7 @@ export const FindMyClassmatesModal = ({ isOpen, onClose, onApply }: FindMyClassm
                 <Target className="w-5 h-5 text-primary" />
                 Find My Section
               </h2>
-              <button onClick={onClose} className="rounded-full p-1 hover:bg-secondary transition-colors">
+              <button onClick={onClose} aria-label="Close" className="rounded-full p-1 hover:bg-secondary transition-colors">
                 <X className="w-5 h-5 text-muted-foreground" />
               </button>
             </div>

@@ -178,6 +178,7 @@ export const SearchAndFilters = ({ filters, onFiltersChange }: SearchAndFiltersP
           {filters.searchTerm && (
             <button
               onClick={() => updateFilter('searchTerm', '')}
+              aria-label="Clear search"
               className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-muted/60 transition-colors"
             >
               <X className="w-3.5 h-3.5 text-muted-foreground" />
