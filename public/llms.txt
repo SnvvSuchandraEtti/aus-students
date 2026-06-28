@@ -1,0 +1,13 @@
+# Aditya University Student Directory
+
+> Browse student profiles across all departments and campuses of Aditya University (AEC, ACET, ACEM, Pharmacy, Global Business School).
+
+A searchable, filterable directory of Aditya University students by program, campus, department, year, and roll number.
+
+## Pages
+- [Home — full directory](/): Search and filter all student profiles.
+- [Engineering students](/?program=engineering): B.Tech students across campuses.
+- [Diploma students](/?program=diploma): Diploma program students.
+- [BBA students](/?program=bba): Business administration students.
+- [Pharmacy students](/?program=pharma): Pharmacy college students.
+- [Forensic science students](/?program=forensic): Forensic science students.

@@ -28,7 +28,10 @@ export const StudentCard = ({ student, onClick, index }: StudentCardProps) => {
   return (
     <div
       ref={cardRef}
-      className="group cursor-pointer"
+      role="button"
+      tabIndex={0}
+      aria-label={`View details for student ${student.rollNumber}`}
+      className="group cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 rounded-xl"
       style={{ 
         animationDelay: `${Math.min(index * 10, 200)}ms`, 
         animationFillMode: 'both',
@@ -36,6 +39,7 @@ export const StudentCard = ({ student, onClick, index }: StudentCardProps) => {
         opacity: 0,
       }}
       onClick={() => onClick(student)}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(student); } }}
     >
       <div className="rounded-xl overflow-hidden bg-card border border-transparent transition-all duration-300 group-hover:-translate-y-1 group-hover:border-cyan-500/50 group-hover:shadow-[0_0_20px_rgba(34,211,238,0.3)]">
         {/* Image */}
@@ -43,7 +47,7 @@ export const StudentCard = ({ student, onClick, index }: StudentCardProps) => {
           {isVisible && !imageError ? (
             <img
               src={student.imageUrl}
-              alt={student.rollNumber}
+              alt={`Photo of student ${student.rollNumber}`}
               className={`w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 ${
                 imageLoaded ? 'opacity-100' : 'opacity-0'
               }`}
