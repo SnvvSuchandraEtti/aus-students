@@ -1,5 +1,5 @@
-const CACHE_NAME = 'aus-gallery-v1';
-const RUNTIME_CACHE = 'aus-runtime-v1';
+const CACHE_NAME = 'aus-gallery-v2';
+const RUNTIME_CACHE = 'aus-runtime-v2';
 const PRECACHE_URLS = ['/', '/manifest.webmanifest'];
 
 self.addEventListener('install', (event) => {
