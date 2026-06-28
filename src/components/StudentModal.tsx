@@ -70,6 +70,7 @@ export const StudentModal = ({ student, isOpen, onClose, filteredStudents = [], 
           {hasPrev && (
             <button
               onClick={() => goTo(-1)}
+              aria-label="Previous student"
               className="absolute left-2 sm:left-6 top-1/2 -translate-y-1/2 z-50 p-2 sm:p-3 rounded-full bg-card/80 backdrop-blur-sm border border-border/50 hover:bg-primary/10 hover:border-primary/30 transition-all"
             >
               <ChevronLeft className="w-5 h-5 text-foreground" />
@@ -78,6 +79,7 @@ export const StudentModal = ({ student, isOpen, onClose, filteredStudents = [], 
           {hasNext && (
             <button
               onClick={() => goTo(1)}
+              aria-label="Next student"
               className="absolute right-2 sm:right-6 top-1/2 -translate-y-1/2 z-50 p-2 sm:p-3 rounded-full bg-card/80 backdrop-blur-sm border border-border/50 hover:bg-primary/10 hover:border-primary/30 transition-all"
             >
               <ChevronRight className="w-5 h-5 text-foreground" />
@@ -110,7 +112,7 @@ export const StudentModal = ({ student, isOpen, onClose, filteredStudents = [], 
                     <>
                       <img
                         src={student.imageUrl}
-                        alt={student.rollNumber}
+                        alt={`Photo of student ${student.rollNumber}`}
                         className={`w-full h-full object-cover transition-opacity duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0'}`}
                         onLoad={() => { setImageLoaded(true); setImageError(false); }}
                         onError={() => { setImageError(true); setImageLoaded(false); }}
@@ -134,6 +136,7 @@ export const StudentModal = ({ student, isOpen, onClose, filteredStudents = [], 
                     </h2>
                     <button
                       onClick={copyRollNumber}
+                      aria-label="Copy roll number"
                       className="p-1.5 rounded-lg hover:bg-muted/50 transition-colors"
                       title="Copy roll number"
                     >
